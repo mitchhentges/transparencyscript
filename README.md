@@ -4,7 +4,7 @@ Binary-Transparency ReadMe
 Testing
 -------
 1. Clone the repo: `git clone https://github.com/BrandonTang/binary-transparency.git`
-2. Setup a virtualenv and install required packages: `pip install requirements.txt`
+2. Setup a virtualenv and install required packages: `pip install -r requirements.txt`
 3. Create a config.json file referring to config_example.json, that looks like:
 ```
     {
