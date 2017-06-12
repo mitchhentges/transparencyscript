@@ -1,0 +1,2 @@
+TRANSPARENCY_VERSION = "0"
+TRANSPARENCY_SUFFIX = "stage.fx-trans.net"
