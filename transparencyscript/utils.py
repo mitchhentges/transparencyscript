@@ -35,8 +35,7 @@ def get_config_vars():
 
 
 # Fetch summary file
-def get_summary():
-    config_vars = get_config_vars()
-    r = requests.get(config_vars["ISSUE_TRANSPARENCY_CERT_ARGUMENTS"]["--summary"])
+def get_summary(summary):
+    r = requests.get(summary)
     r.raise_for_status()
     return r.text

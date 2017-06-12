@@ -12,7 +12,7 @@ def issue_cert():
     config_vars = get_config_vars()
 
     # Parse tree head from summary file
-    summary = retry(get_summary)
+    summary = retry(get_summary, args=(config_vars["summary"],))
     tree_head = None
     for line in summary.split("\n"):
         tokens = re.split(r'\s+', line)
@@ -23,8 +23,7 @@ def issue_cert():
         raise Exception("No tree head found in summary file")
 
     base_name = "{}.{}".format("invalid", TRANSPARENCY_SUFFIX)
-    trans_name = make_transparency_name(tree_head, config_vars["ISSUE_TRANSPARENCY_CERT_ARGUMENTS"]["--version"],
-                                        config_vars["ISSUE_TRANSPARENCY_CERT_ARGUMENTS"]["--stage-product"])
+    trans_name = make_transparency_name(tree_head, config_vars["version"], config_vars["stage-product"])
 
     # Issue and save the certificate, then delete the extra files lego created
     lego_env = {
@@ -33,11 +32,11 @@ def issue_cert():
         "AWS_REGION": "us-west-2",
     }
     lego_command = " ".join([
-        "/Users/btang/go/bin/lego",
+        config_vars["lego-path"],
         " --dns route53",
         " --domains {}".format(base_name),
         " --domains {}".format(trans_name),
-        " --email {}".format(config_vars["ISSUE_TRANSPARENCY_CERT_ARGUMENTS"]["--contact"]),
+        " --email {}".format(config_vars["contact"]),
         " --accept-tos",
         "run"
     ])
@@ -45,7 +44,7 @@ def issue_cert():
     save_command = " ".join([
         "mv",
         "./.lego/certificates/{}.crt".format(base_name),
-        config_vars["ISSUE_TRANSPARENCY_CERT_ARGUMENTS"]["--chain"]
+        config_vars["chain"]
     ])
 
     cleanup_command = "rm -rf ./.lego"
