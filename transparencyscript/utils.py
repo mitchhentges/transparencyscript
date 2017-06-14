@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import sys
 import requests
 
 from constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
@@ -23,10 +24,13 @@ def make_transparency_name(tree_head_hex, version, product):
     return name
 
 
-# Return config values from config.json
+# Return config values from config.json or task.json
 def get_config_vars():
-    here = os.path.dirname(os.path.abspath(__file__))
-    config_json = os.path.join(here, '../config.json')
+    if len(sys.argv) > 1:
+        config_json = '/tmp/work/task.json'
+    else:
+        here = os.path.dirname(os.path.abspath(__file__))
+        config_json = os.path.join(here, '../config.json')
 
     with open(config_json) as config_file:
         config_vars = json.load(config_file)

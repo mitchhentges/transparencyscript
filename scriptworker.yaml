@@ -20,9 +20,9 @@ worker_id: dummy-worker-transpar1
 # /etc/.scriptworker, or the environment variables TASKCLUSTER_ACCESS_TOKEN,
 # TASKCLUSTER_CLIENT_ID, and TASKCLUSTER_CERITIFICATE.
 #-----------------------------------------------------------------------------------------------
-credentials:
-    clientId: mozilla-ldap/btang@mozilla.com/scriptworker-testing
-    accessToken: w373A7jXQ2inyHkPcDvwqQkfXJgdnWQ5OfhS7-7khRYA
+#credentials:
+#    clientId: mozilla-ldap/btang@mozilla.com/scriptworker-testing
+#    accessToken: REDACTED
 
 #-----------------------------------------------------------------------------------------------
 # Task configs

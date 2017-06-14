@@ -5,3 +5,4 @@ transparency-venv/
 .idea/
 .lego/
 .DS_Store
+secrets.json
