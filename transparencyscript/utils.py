@@ -24,16 +24,22 @@ def make_transparency_name(tree_head_hex, version, product):
     return name
 
 
-# Return config values from config.json or task.json
+# Return config values from config.json and task.json
 def get_config_vars():
-    if len(sys.argv) > 1:
-        config_json = '/tmp/work/task.json'
-    else:
-        here = os.path.dirname(os.path.abspath(__file__))
-        config_json = os.path.join(here, '../config.json')
 
+    here = os.path.dirname(os.path.abspath(__file__))
+    config_json = os.path.join(here, '../config.json')
     with open(config_json) as config_file:
         config_vars = json.load(config_file)
+
+    # If task.json path is given in command line, read task.json
+    if len(sys.argv) > 1:
+        task_json = '/tmp/work/task.json'
+        with open(task_json) as task_file:
+            task_vars = json.load(task_file)
+        transparency_vars = {**config_vars, **task_vars}
+        print("transparency_vars: ", transparency_vars)
+        return transparency_vars
 
     return config_vars
 

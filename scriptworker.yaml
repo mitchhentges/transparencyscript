@@ -20,9 +20,9 @@ worker_id: dummy-worker-transpar1
 # /etc/.scriptworker, or the environment variables TASKCLUSTER_ACCESS_TOKEN,
 # TASKCLUSTER_CLIENT_ID, and TASKCLUSTER_CERITIFICATE.
 #-----------------------------------------------------------------------------------------------
-#credentials:
-#    clientId: mozilla-ldap/btang@mozilla.com/scriptworker-testing
-#    accessToken: REDACTED
+credentials:
+    clientId: mozilla-ldap/btang@mozilla.com/scriptworker-testing
+    accessToken: REDACTED
 
 #-----------------------------------------------------------------------------------------------
 # Task configs
@@ -34,7 +34,7 @@ artifact_upload_timeout: 1200
 task_max_timeout: 1200
 
 # This is the command line to execute the task.
-task_script: ["bash", "-c", "transparency-venv/bin/python transparencyscript/script.py"]
+task_script: ["bash", "-c", "transparency-venv/bin/python transparencyscript/script.py /tmp/work/task.json"]
 
 # debug logging?
 verbose: true
