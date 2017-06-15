@@ -27,10 +27,13 @@ def make_transparency_name(tree_head_hex, version, product):
 # Return config values from config.json and task.json
 def get_config_vars():
 
-    here = os.path.dirname(os.path.abspath(__file__))
-    config_json = os.path.join(here, '../config.json')
-    with open(config_json) as config_file:
-        config_vars = json.load(config_file)
+    config_json = os.path.join(os.getcwd(), 'config.json')
+    if os.path.exists(config_json):
+        with open(config_json) as config_file:
+            config_vars = json.load(config_file)
+    else:
+        print("config.json must exist in current directory.")
+        sys.exit(1)
 
     if len(sys.argv) > 1:
         task_json = sys.argv[1]
