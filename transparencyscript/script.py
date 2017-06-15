@@ -3,8 +3,8 @@ import re
 from subprocess import check_call
 from redo import retry
 
-from constants import TRANSPARENCY_SUFFIX
-from utils import make_transparency_name, get_config_vars, get_summary
+from transparencyscript.constants import TRANSPARENCY_SUFFIX
+from transparencyscript.utils import make_transparency_name, get_config_vars, get_summary
 
 
 def issue_cert():
