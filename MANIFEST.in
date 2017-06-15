@@ -1,3 +1,5 @@
 include README.md
 include config_example.json
 include version.json
+
+recursive-exclude * __pycache__
