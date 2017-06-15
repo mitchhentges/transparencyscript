@@ -32,13 +32,13 @@ def get_config_vars():
     with open(config_json) as config_file:
         config_vars = json.load(config_file)
 
-    # If task.json path is given in command line, read task.json
     if len(sys.argv) > 1:
-        task_json = '/tmp/work/task.json'
+        task_json = sys.argv[1]
         with open(task_json) as task_file:
             task_vars = json.load(task_file)
+
         transparency_vars = {**config_vars, **task_vars}
-        print("transparency_vars: ", transparency_vars)
+
         return transparency_vars
 
     return config_vars
