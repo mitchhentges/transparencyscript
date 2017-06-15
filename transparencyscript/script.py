@@ -7,7 +7,10 @@ from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_summary
 
 
-def issue_cert():
+def main(name=None):
+    if name not in (None, '__main__'):
+        return
+
     # Store default parameters and keys in config_vars
     config_vars = get_config_vars()
 
@@ -55,5 +58,4 @@ def issue_cert():
     check_call(cleanup_command, shell=True)
 
 
-if __name__ == "__main__":
-    issue_cert()
+main(name=__name__)
