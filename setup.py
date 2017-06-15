@@ -22,9 +22,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "redo",
-        "requests",
-        "scriptworker",
-        "taskcluster"
+        "requests"
     ],
     package_data={
         "": ["version.json"],
