@@ -12,8 +12,8 @@ Testing
               "AWS_ACCESS_KEY_ID": "*****",
               "AWS_SECRET_ACCESS_KEY": "*****"
           },
+          "lego-path": "...",
           "payload": {
-              "lego-path": "...",
               "stage-product": "...",
               "version": "...",
               "contact": "...",

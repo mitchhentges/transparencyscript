@@ -1,5 +1,6 @@
 __pycache__
 config.json
+secrets.json
 TRANSPARENCY.pem
 transparency-venv/
 dist/
@@ -7,4 +8,4 @@ transparencyscript.egg-info/
 .idea/
 .lego/
 .DS_Store
-secrets.json
+.cache/
