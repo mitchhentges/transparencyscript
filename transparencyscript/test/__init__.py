@@ -4,7 +4,7 @@ import json
 
 
 def get_fake_config():
-    config_json = os.path.join(os.getcwd(), 'fake_config.json')
+    config_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_config.json')
     if os.path.exists(config_json):
         with open(config_json) as config_file:
             config_vars = json.load(config_file)
@@ -15,7 +15,7 @@ def get_fake_config():
 
 
 def get_fake_task():
-    task_json = os.path.join(os.getcwd(), 'fake_task.json')
+    task_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_task.json')
     if os.path.exists(task_json):
         with open(task_json) as task_file:
             task_vars = json.load(task_file)
@@ -26,7 +26,7 @@ def get_fake_task():
 
 
 def get_fake_transparency():
-    transparency_json = os.path.join(os.getcwd(), 'fake_transparency.json')
+    transparency_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_transparency.json')
     if os.path.exists(transparency_json):
         with open(transparency_json) as transparency_file:
             transparency_vars = json.load(transparency_file)

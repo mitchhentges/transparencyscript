@@ -23,7 +23,7 @@ def test_get_config_vars():
     fake_task_vars = get_fake_task()
     fake_transparency_vars = get_fake_transparency()
 
-    config_json = os.path.join(os.getcwd(), 'fake_config.json')
+    config_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_config.json')
     if os.path.exists(config_json):
         with open(config_json) as config_file:
             config_vars = json.load(config_file)
@@ -34,7 +34,7 @@ def test_get_config_vars():
         print("ERROR: config.json must exist in current directory.")
         sys.exit(1)
 
-    task_json = os.path.join(os.getcwd(), 'fake_task.json')
+    task_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_task.json')
     if os.path.exists(task_json):
         with open(task_json) as task_file:
             task_vars = json.load(task_file)
