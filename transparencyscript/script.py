@@ -36,7 +36,7 @@ def main(name=None):
         "AWS_REGION": "us-west-2",
     }
     lego_command = " ".join([
-        config_vars["payload"]["lego-path"],
+        config_vars["lego-path"],
         " --dns route53",
         " --domains {}".format(base_name),
         " --domains {}".format(trans_name),

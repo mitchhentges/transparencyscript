@@ -32,7 +32,7 @@ def get_config_vars():
         with open(config_json) as config_file:
             config_vars = json.load(config_file)
     else:
-        print("config.json must exist in current directory.")
+        print("ERROR: config.json must exist in current directory.")
         sys.exit(1)
 
     if len(sys.argv) > 1:

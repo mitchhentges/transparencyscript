@@ -1,0 +1,37 @@
+{
+  "AWS_KEYS": {
+    "AWS_ACCESS_KEY_ID": "*****",
+    "AWS_SECRET_ACCESS_KEY": "*****"
+  },
+  "lego-path": "/Users/btang/go/bin/lego",
+  "payload": {
+    "chain": "TRANSPARENCY.pem",
+    "contact": "btang@mozilla.com",
+    "image": "ubuntu:13.10",
+    "maxRunTime": 600,
+    "stage-product": "firefox",
+    "summary": "https://archive.mozilla.org/pub/firefox/releases/55.0b1/SHA256SUMMARY",
+    "version": "55.0b1"
+  },
+  "created": "2017-06-16T17:34:24.623Z",
+  "deadline": "2017-06-17T17:34:24.624Z",
+  "dependencies": [],
+  "expires": "2018-06-17T17:34:24.624Z",
+  "extra": {},
+  "metadata": {
+    "description": "Running transparency script using scriptworker and task.json",
+    "name": "Testing Binary Transparency",
+    "owner": "btang@mozilla.com",
+    "source": "https://tools.taskcluster.net/task-creator/"
+  },
+  "priority": "lowest",
+  "provisionerId": "test-dummy-provisioner",
+  "requires": "all-completed",
+  "retries": 0,
+  "routes": [],
+  "schedulerId": "-",
+  "scopes": [],
+  "tags": {},
+  "taskGroupId": "Bzk9OinIQPynj9tY7sYBJA",
+  "workerType": "dummy-worker-transpar"
+}
