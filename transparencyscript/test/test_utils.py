@@ -5,6 +5,7 @@ import requests_mock
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
     get_summary
 from transparencyscript.test import get_fake_config, get_fake_task, get_fake_transparency
+from transparencyscript.constants import SUMMARY_TEXT
 
 
 def test_make_transparency_name():
@@ -48,7 +49,7 @@ def test_get_transparency_vars():
 def test_get_summary():
     with requests_mock.Mocker() as m:
         m.get("https://ipv.sx/tmp/SHA256SUMMARY",
-              text="eae00f676fc07354cd509994f9946956462805e6950aacba4c1bc9028880efc2 TREE_HEAD")
+              text=SUMMARY_TEXT)
         summary = requests.get("https://ipv.sx/tmp/SHA256SUMMARY").text
 
-    assert get_summary("https://ipv.sx/tmp/SHA256SUMMARY")[0:74] == summary
+    assert get_summary("https://ipv.sx/tmp/SHA256SUMMARY")[0:447] == summary
