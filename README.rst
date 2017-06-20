@@ -34,3 +34,4 @@ Testing
    ``transparencyscript/script.py /tmp/work/task.json``
 #. If using taskcluster to create task.json, put values in payload of
    task: ``scriptworker scriptworker.yaml``
+#. For testing: ``pip install pytest`` and ``py.test transparencyscript/test/test_utils.py``
