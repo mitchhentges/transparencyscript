@@ -24,7 +24,7 @@ def make_transparency_name(tree_head_hex, version, product):
     return name
 
 
-# Return values from config.json
+# Return values from config.json - the default set of configurations
 def get_config_vars(config_path):
     if os.path.exists(config_path):
         with open(config_path) as config_file:
@@ -35,7 +35,7 @@ def get_config_vars(config_path):
         sys.exit(1)
 
 
-# Return values from task.json
+# Return values from task.json - file created when scriptworker is run to store payload variables
 def get_task_vars(task_path):
     with open(task_path) as task_file:
         task_vars = json.load(task_file)

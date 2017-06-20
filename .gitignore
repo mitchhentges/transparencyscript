@@ -9,3 +9,5 @@ transparencyscript.egg-info/
 .lego/
 .DS_Store
 .cache/
+.tox/
+.coverage
