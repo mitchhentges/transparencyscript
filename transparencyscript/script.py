@@ -1,10 +1,13 @@
+import os
 import re
+import sys
 
 from subprocess import check_call
 from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
-from transparencyscript.utils import make_transparency_name, get_config_vars, get_summary
+from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
+    get_summary
 
 
 def main(name=None):
@@ -12,7 +15,13 @@ def main(name=None):
         return
 
     # Store default parameters and keys in config_vars
-    config_vars = get_config_vars()
+    config_path = os.path.join(os.getcwd(), 'config.json')
+    config_vars = get_config_vars(config_path)
+
+    if len(sys.argv) > 1:
+        task_path = sys.argv[1]
+        task_vars = get_task_vars(task_path)
+        config_vars = get_transparency_vars(config_vars, task_vars)
 
     # Parse tree head from summary file
     summary = retry(get_summary, args=(config_vars["payload"]["summary"],))

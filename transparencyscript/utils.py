@@ -24,27 +24,28 @@ def make_transparency_name(tree_head_hex, version, product):
     return name
 
 
-# Return config values from config.json and task.json
-def get_config_vars():
-
-    config_json = os.path.join(os.getcwd(), 'config.json')
-    if os.path.exists(config_json):
-        with open(config_json) as config_file:
+# Return values from config.json
+def get_config_vars(config_path):
+    if os.path.exists(config_path):
+        with open(config_path) as config_file:
             config_vars = json.load(config_file)
+        return config_vars
     else:
         print("ERROR: config.json must exist in current directory.")
         sys.exit(1)
 
-    if len(sys.argv) > 1:
-        task_json = sys.argv[1]
-        with open(task_json) as task_file:
-            task_vars = json.load(task_file)
 
-        transparency_vars = {**config_vars, **task_vars}
+# Return values from task.json
+def get_task_vars(task_path):
+    with open(task_path) as task_file:
+        task_vars = json.load(task_file)
+    return task_vars
 
-        return transparency_vars
 
-    return config_vars
+# Return values from both config.json and task.json, where task.json overwrites config.json duplicate values
+def get_transparency_vars(config_vars, task_vars):
+    transparency_vars = {**config_vars, **task_vars}
+    return transparency_vars
 
 
 # Fetch summary file

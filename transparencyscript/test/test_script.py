@@ -6,7 +6,6 @@ from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.test import get_fake_config
 from transparencyscript.utils import get_summary, make_transparency_name
 
-
 correct_lego_env = {'AWS_ACCESS_KEY_ID': '*****', 'AWS_SECRET_ACCESS_KEY': '*****', 'AWS_REGION': 'us-west-2'}
 correct_lego_command = "/Users/btang/go/bin/lego  --dns route53  --domains invalid.stage.fx-trans.net  --domains " \
                        "eae00f676fc07354cd509994f9946956.462805e6950aacba4c1bc9028880efc2.53-0b5.firefox.0." \
@@ -63,9 +62,3 @@ def test_save_command():
     ])
 
     assert save_command == correct_save_command
-
-
-def test_cleanup_command():
-    cleanup_command = "rm -rf ./.lego"
-
-    assert cleanup_command == correct_cleanup_command

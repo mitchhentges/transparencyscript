@@ -1,10 +1,9 @@
 import os
-import sys
-import json
 import requests
 import requests_mock
 
-from transparencyscript.utils import make_transparency_name, get_config_vars, get_summary
+from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
+    get_summary
 from transparencyscript.test import get_fake_config, get_fake_task, get_fake_transparency
 
 
@@ -20,28 +19,28 @@ def test_make_transparency_name():
 
 def test_get_config_vars():
     fake_config_vars = get_fake_config()
+
+    config_path = os.path.join(os.getcwd(), 'transparencyscript/test/fake_config.json')
+    config_vars = get_config_vars(config_path)
+
+    assert config_vars == fake_config_vars
+
+
+def test_get_task_vars():
     fake_task_vars = get_fake_task()
+
+    task_path = os.path.join(os.getcwd(), 'transparencyscript/test/fake_task.json')
+    task_vars = get_task_vars(task_path)
+
+    assert task_vars == fake_task_vars
+
+
+def test_get_transparency_vars():
     fake_transparency_vars = get_fake_transparency()
+    fake_config_vars = get_fake_config()
+    fake_task_vars = get_fake_task()
 
-    config_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_config.json')
-    if os.path.exists(config_json):
-        with open(config_json) as config_file:
-            config_vars = json.load(config_file)
-
-        assert config_vars == fake_config_vars
-
-    else:
-        print("ERROR: config.json must exist in current directory.")
-        sys.exit(1)
-
-    task_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_task.json')
-    if os.path.exists(task_json):
-        with open(task_json) as task_file:
-            task_vars = json.load(task_file)
-
-        assert task_vars == fake_task_vars
-
-    transparency_vars = {**config_vars, **task_vars}
+    transparency_vars = get_transparency_vars(fake_config_vars, fake_task_vars)
 
     assert transparency_vars == fake_transparency_vars
 
