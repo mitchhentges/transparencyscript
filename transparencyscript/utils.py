@@ -53,3 +53,37 @@ def get_summary(summary):
     r = requests.get(summary)
     r.raise_for_status()
     return r.text
+
+
+# Return lego_env required for lego_command
+def get_lego_env(config_vars):
+    lego_env = {
+        "AWS_ACCESS_KEY_ID": config_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"],
+        "AWS_SECRET_ACCESS_KEY": config_vars["AWS_KEYS"]["AWS_SECRET_ACCESS_KEY"],
+        "AWS_REGION": "us-west-2",
+    }
+    return lego_env
+
+
+# Return lego_command for first check_call in script.py
+def get_lego_command(config_vars, base_name, trans_name):
+    lego_command = " ".join([
+        config_vars["lego-path"],
+        " --dns route53",
+        " --domains {}".format(base_name),
+        " --domains {}".format(trans_name),
+        " --email {}".format(config_vars["payload"]["contact"]),
+        " --accept-tos",
+        "run"
+    ])
+    return lego_command
+
+
+# Return save_command for second check_call in script.py
+def get_save_command(config_vars, base_name):
+    save_command = " ".join([
+        "mv",
+        "./.lego/certificates/{}.crt".format(base_name),
+        config_vars["payload"]["chain"]
+    ])
+    return save_command

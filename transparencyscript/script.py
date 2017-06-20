@@ -7,7 +7,7 @@ from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
-    get_summary
+    get_summary, get_lego_env, get_lego_command, get_save_command
 
 
 def main(name=None):
@@ -39,27 +39,9 @@ def main(name=None):
                                         config_vars["payload"]["stage-product"])
 
     # Issue and save the certificate, then delete the extra files lego created
-    lego_env = {
-        "AWS_ACCESS_KEY_ID": config_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"],
-        "AWS_SECRET_ACCESS_KEY": config_vars["AWS_KEYS"]["AWS_SECRET_ACCESS_KEY"],
-        "AWS_REGION": "us-west-2",
-    }
-    lego_command = " ".join([
-        config_vars["lego-path"],
-        " --dns route53",
-        " --domains {}".format(base_name),
-        " --domains {}".format(trans_name),
-        " --email {}".format(config_vars["payload"]["contact"]),
-        " --accept-tos",
-        "run"
-    ])
-
-    save_command = " ".join([
-        "mv",
-        "./.lego/certificates/{}.crt".format(base_name),
-        config_vars["payload"]["chain"]
-    ])
-
+    lego_env = get_lego_env(config_vars)
+    lego_command = get_lego_command(config_vars, base_name, trans_name)
+    save_command = get_save_command(config_vars, base_name)
     cleanup_command = "rm -rf ./.lego"
 
     check_call(lego_command, env=lego_env, shell=True)
