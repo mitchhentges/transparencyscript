@@ -1,13 +1,11 @@
 import os
-import re
 import sys
 
 from subprocess import check_call
-from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
-    get_summary, get_lego_env, get_lego_command, get_save_command
+    get_tree_head, get_lego_env, get_lego_command, get_save_command
 
 
 def main(name=None):
@@ -24,12 +22,7 @@ def main(name=None):
         config_vars = get_transparency_vars(config_vars, task_vars)
 
     # Parse tree head from summary file
-    summary = retry(get_summary, args=(config_vars["payload"]["summary"],))
-    tree_head = None
-    for line in summary.split("\n"):
-        tokens = re.split(r'\s+', line)
-        if len(tokens) == 2 and tokens[1] == "TREE_HEAD":
-            tree_head = tokens[0]
+    tree_head = get_tree_head(config_vars)
 
     if tree_head is None:
         raise Exception("No tree head found in summary file")

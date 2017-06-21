@@ -4,6 +4,8 @@ import json
 import sys
 import requests
 
+from redo import retry
+
 from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
 
 
@@ -53,6 +55,17 @@ def get_summary(summary):
     r = requests.get(summary)
     r.raise_for_status()
     return r.text
+
+
+# Fetch tree head from summary file - needed to create transparency name
+def get_tree_head(config_vars):
+    summary = retry(get_summary, args=(config_vars["payload"]["summary"],))
+    tree_head = None
+    for line in summary.split("\n"):
+        tokens = re.split(r'\s+', line)
+        if len(tokens) == 2 and tokens[1] == "TREE_HEAD":
+            tree_head = tokens[0]
+    return tree_head
 
 
 # Return lego_env required for lego_command
