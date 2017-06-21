@@ -39,10 +39,13 @@ def get_config_vars(config_path):
 
 # Return values from task.json - file created when scriptworker is run to store payload variables
 def get_task_vars(task_path):
-    with open(task_path) as task_file:
-        task_vars = json.load(task_file)
-    return task_vars
-
+    if os.path.exists(task_path):
+        with open(task_path) as task_file:
+            task_vars = json.load(task_file)
+        return task_vars
+    else:
+        print("ERROR: task.json must exist in given path.")
+        sys.exit(1)
 
 # Return values from both config.json and task.json, where task.json overwrites config.json duplicate values
 def get_transparency_vars(config_vars, task_vars):
