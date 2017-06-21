@@ -24,6 +24,10 @@ setup(
         "redo",
         "requests"
     ],
+    tests_require = [
+        "pytest",
+        "requests-mock"
+    ],
     package_data={
         "": ["version.json"],
     },
