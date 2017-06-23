@@ -35,3 +35,4 @@ Testing
 #. If using taskcluster to create task.json, put values in payload of
    task: ``scriptworker scriptworker.yaml``
 #. For testing: ``pip install pytest`` and ``py.test transparencyscript/test/test_utils.py``
+#. To create a source distribution: ``python setup.py sdist``
