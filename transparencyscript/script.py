@@ -13,7 +13,7 @@ def main(name=None):
         return
 
     # Store default parameters and keys in config_vars
-    config_path = os.path.join(os.getcwd(), 'config.json')
+    config_path = os.path.join('/builds/scriptworker', 'script_config.json')
     config_vars = get_config_vars(config_path)
 
     if len(sys.argv) > 1:
