@@ -5,7 +5,7 @@ from subprocess import check_call
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
-    get_tree_head, get_lego_env, get_lego_command, get_save_command
+    get_tree_head, get_lego_env, get_lego_command, get_save_command, set_aws_creds
 
 
 def main(name=None):
@@ -15,6 +15,8 @@ def main(name=None):
     # Store default parameters and keys in config_vars
     config_path = os.path.join('/builds/scriptworker', 'script_config.json')
     config_vars = get_config_vars(config_path)
+
+    set_aws_creds(config_vars)
 
     if len(sys.argv) > 1:
         task_path = sys.argv[1]

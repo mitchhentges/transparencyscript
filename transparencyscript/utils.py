@@ -74,8 +74,8 @@ def get_tree_head(config_vars):
 # Return lego_env required for lego_command
 def get_lego_env(config_vars):
     lego_env = {
-        "AWS_ACCESS_KEY_ID": config_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"],
-        "AWS_SECRET_ACCESS_KEY": config_vars["AWS_KEYS"]["AWS_SECRET_ACCESS_KEY"],
+        "AWS_ACCESS_KEY_ID": os.environ.get("AWS_ACCESS_KEY_ID"),
+        "AWS_SECRET_ACCESS_KEY": os.environ.get("AWS_SECRET_ACCESS_KEY"),
         "AWS_REGION": "us-west-2",
     }
     return lego_env
@@ -103,3 +103,10 @@ def get_save_command(config_vars, base_name):
         config_vars["payload"]["chain"]
     ])
     return save_command
+
+
+def set_aws_creds(config_vars):
+    if "AWS_KEYS" in config_vars:
+        os.environ["AWS_ACCESS_KEY_ID"] = config_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"]
+        os.environ["AWS_SECRET_ACCESS_KEY"] = config_vars["AWS_KEYS"]["AWS_SECRET_ACCESS_KEY"]
+        del config_vars["AWS_KEYS"]
