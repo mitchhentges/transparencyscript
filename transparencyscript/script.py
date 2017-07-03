@@ -16,8 +16,10 @@ def main(name=None):
     config_path = os.path.join('/builds/scriptworker', 'script_config.json')
     config_vars = get_config_vars(config_path)
 
+    # Move AWS keys from config_vars to environment variables
     set_aws_creds(config_vars)
 
+    # Concatenate local config_vars with task_vars created from task.json
     if len(sys.argv) > 1:
         task_path = sys.argv[1]
         task_vars = get_task_vars(task_path)

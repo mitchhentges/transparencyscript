@@ -47,6 +47,7 @@ def get_task_vars(task_path):
         print("ERROR: task.json must exist in given path.")
         sys.exit(1)
 
+
 # Return values from both config.json and task.json, where task.json overwrites config.json duplicate values
 def get_transparency_vars(config_vars, task_vars):
     transparency_vars = {**config_vars, **task_vars}
@@ -81,7 +82,7 @@ def get_lego_env(config_vars):
     return lego_env
 
 
-# Return lego_command for first check_call in script.py
+# Return lego_command for first check_call in transparencyscript/script.py
 def get_lego_command(config_vars, base_name, trans_name):
     lego_command = " ".join([
         config_vars["lego-path"],
@@ -95,7 +96,7 @@ def get_lego_command(config_vars, base_name, trans_name):
     return lego_command
 
 
-# Return save_command for second check_call in script.py
+# Return save_command for second check_call in transparencyscript/script.py
 def get_save_command(config_vars, base_name):
     save_command = " ".join([
         "mv",
@@ -105,6 +106,7 @@ def get_save_command(config_vars, base_name):
     return save_command
 
 
+# Move AWS credentials into environment variables and remove from config_vars to prevent credentials leaking
 def set_aws_creds(config_vars):
     if "AWS_KEYS" in config_vars:
         os.environ["AWS_ACCESS_KEY_ID"] = config_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"]
