@@ -3,8 +3,8 @@ import requests
 import requests_mock
 
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
-    get_summary
-from transparencyscript.test import get_fake_config, get_fake_task, get_fake_transparency
+    get_summary, set_aws_creds
+from transparencyscript.test import get_fake_config, get_fake_task, get_fake_transparency, get_fake_config_no_aws
 from transparencyscript.constants import SUMMARY_TEXT, TRANSPARENCY_SUFFIX
 
 
@@ -38,7 +38,7 @@ def test_get_task_vars():
 
 def test_get_transparency_vars():
     fake_transparency_vars = get_fake_transparency()
-    fake_config_vars = get_fake_config()
+    fake_config_vars = get_fake_config_no_aws()
     fake_task_vars = get_fake_task()
 
     transparency_vars = get_transparency_vars(fake_config_vars, fake_task_vars)
@@ -104,3 +104,12 @@ def test_save_command():
     ])
 
     assert save_command == correct_save_command
+
+
+def test_set_aws_creds():
+    fake_config_vars_no_aws = get_fake_config_no_aws()
+
+    fake_config_vars = get_fake_config()
+    set_aws_creds(fake_config_vars)
+
+    assert fake_config_vars_no_aws == fake_config_vars
