@@ -106,10 +106,28 @@ def test_save_command():
     assert save_command == correct_save_command
 
 
-def test_set_aws_creds():
+def test_set_aws_creds_config_vars():
     fake_config_vars_no_aws = get_fake_config_no_aws()
 
     fake_config_vars = get_fake_config()
     set_aws_creds(fake_config_vars)
 
     assert fake_config_vars_no_aws == fake_config_vars
+
+
+def test_set_aws_creds_access_key_id():
+    access_key_id = "*****"
+
+    fake_config_vars = get_fake_config()
+    set_aws_creds(fake_config_vars)
+
+    assert os.environ.get("AWS_ACCESS_KEY_ID") == access_key_id
+
+
+def test_set_aws_creds_secret_access_key():
+    secret_access_key = "*****"
+
+    fake_config_vars = get_fake_config()
+    set_aws_creds(fake_config_vars)
+
+    assert os.environ.get("AWS_SECRET_ACCESS_KEY") == secret_access_key
