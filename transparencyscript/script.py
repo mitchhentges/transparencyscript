@@ -4,8 +4,8 @@ import sys
 from subprocess import check_call
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
-from transparencyscript.utils import make_transparency_name, get_config_vars, get_task_vars, get_transparency_vars, \
-    get_tree_head, get_lego_env, get_lego_command, get_save_command, set_aws_creds
+from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
+    get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command
 
 
 def main(name=None):
@@ -16,8 +16,9 @@ def main(name=None):
     config_path = os.path.join('/builds/scriptworker', 'script_config.json')
     config_vars = get_config_vars(config_path)
 
-    # Move AWS keys from config_vars to environment variables
-    set_aws_creds(config_vars)
+    # Store AWS credentials in password_vars
+    password_path = os.path.join('/builds/scriptworker', 'passwords.json')
+    password_vars = get_password_vars(password_path)
 
     # Concatenate local config_vars with task_vars created from task.json
     if len(sys.argv) > 1:
@@ -36,7 +37,7 @@ def main(name=None):
                                         config_vars["payload"]["stage-product"])
 
     # Issue and save the certificate, then delete the extra files lego created
-    lego_env = get_lego_env(config_vars)
+    lego_env = get_lego_env(password_vars)
     lego_command = get_lego_command(config_vars, base_name, trans_name)
     save_command = get_save_command(config_vars, base_name)
     cleanup_command = "rm -rf ./.lego"

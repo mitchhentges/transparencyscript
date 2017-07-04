@@ -6,7 +6,7 @@ import requests
 
 from redo import retry
 
-from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
+from constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
 
 
 # Create transparency name for required lego_command parameter
@@ -34,6 +34,17 @@ def get_config_vars(config_path):
         return config_vars
     else:
         print("ERROR: script_config.json must exist in current directory.")
+        sys.exit(1)
+
+
+# Return values from passwords.json - contains AWS credentials
+def get_password_vars(password_path):
+    if os.path.exists(password_path):
+        with open(password_path) as password_file:
+            password_vars = json.load(password_file)
+        return password_vars
+    else:
+        print("ERROR: passwords.json must exist in current directory.")
         sys.exit(1)
 
 
@@ -73,10 +84,10 @@ def get_tree_head(config_vars):
 
 
 # Return lego_env required for lego_command
-def get_lego_env(config_vars):
+def get_lego_env(password_vars):
     lego_env = {
-        "AWS_ACCESS_KEY_ID": os.environ.get("AWS_ACCESS_KEY_ID"),
-        "AWS_SECRET_ACCESS_KEY": os.environ.get("AWS_SECRET_ACCESS_KEY"),
+        "AWS_ACCESS_KEY_ID": password_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"],
+        "AWS_SECRET_ACCESS_KEY": password_vars["AWS_KEYS"]["AWS_SECRET_ACCESS_KEY"],
         "AWS_REGION": "us-west-2",
     }
     return lego_env
@@ -90,6 +101,7 @@ def get_lego_command(config_vars, base_name, trans_name):
         " --domains {}".format(base_name),
         " --domains {}".format(trans_name),
         " --email {}".format(config_vars["payload"]["contact"]),
+        " --path {}/lego".format(config_vars["work_dir"]),
         " --accept-tos",
         "run"
     ])
@@ -100,15 +112,7 @@ def get_lego_command(config_vars, base_name, trans_name):
 def get_save_command(config_vars, base_name):
     save_command = " ".join([
         "mv",
-        "./.lego/certificates/{}.crt".format(base_name),
+        "{}/lego/certificates/{}.crt".format(config_vars["work_dir"], base_name),
         config_vars["payload"]["chain"]
     ])
     return save_command
-
-
-# Move AWS credentials into environment variables and remove from config_vars to prevent credentials leaking
-def set_aws_creds(config_vars):
-    if "AWS_KEYS" in config_vars:
-        os.environ["AWS_ACCESS_KEY_ID"] = config_vars["AWS_KEYS"]["AWS_ACCESS_KEY_ID"]
-        os.environ["AWS_SECRET_ACCESS_KEY"] = config_vars["AWS_KEYS"]["AWS_SECRET_ACCESS_KEY"]
-        del config_vars["AWS_KEYS"]
