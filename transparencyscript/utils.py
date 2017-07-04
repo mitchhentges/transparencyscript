@@ -101,7 +101,7 @@ def get_lego_command(config_vars, base_name, trans_name):
         " --domains {}".format(base_name),
         " --domains {}".format(trans_name),
         " --email {}".format(config_vars["payload"]["contact"]),
-        " --path {}/lego".format(config_vars["work_dir"]),
+        " --path {}/lego".format(config_vars["work_dir"]),  # Comment when testing locally
         " --accept-tos",
         "run"
     ])
@@ -112,6 +112,7 @@ def get_lego_command(config_vars, base_name, trans_name):
 def get_save_command(config_vars, base_name):
     save_command = " ".join([
         "mv",
+        # "./.lego/certificates/{}.crt".format(base_name), # Uncomment when testing locally
         "{}/lego/certificates/{}.crt".format(config_vars["work_dir"], base_name),
         config_vars["payload"]["chain"]
     ])
