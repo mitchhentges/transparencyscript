@@ -6,7 +6,7 @@ import requests
 
 from redo import retry
 
-from constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
+from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
 
 
 # Create transparency name for required lego_command parameter

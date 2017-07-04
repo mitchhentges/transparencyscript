@@ -1,5 +1,6 @@
 __pycache__
 config.json
+passwords.json
 secrets.json
 TRANSPARENCY.pem
 transparency-venv/

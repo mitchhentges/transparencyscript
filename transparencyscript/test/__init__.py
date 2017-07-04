@@ -14,14 +14,14 @@ def get_fake_config():
         sys.exit(1)
 
 
-def get_fake_config_no_aws():
-    config_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_config_no_aws.json')
-    if os.path.exists(config_json):
-        with open(config_json) as config_file:
-            config_vars = json.load(config_file)
-            return config_vars
+def get_fake_passwords():
+    passwords_json = os.path.join(os.getcwd(), 'transparencyscript/test/fake_passwords.json')
+    if os.path.exists(passwords_json):
+        with open(passwords_json) as passwords_file:
+            password_vars = json.load(passwords_file)
+            return password_vars
     else:
-        print("ERROR: fake_config_no_aws.json must exist in current directory.")
+        print("ERROR: fake_passwords.json must exist in current directory.")
         sys.exit(1)
 
 
