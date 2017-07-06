@@ -114,6 +114,6 @@ def get_save_command(config_vars, base_name):
         "mv",
         # "./.lego/certificates/{}.crt".format(base_name), # Uncomment when testing locally
         "{}/lego/certificates/{}.crt".format(config_vars["work_dir"], base_name),
-        config_vars["payload"]["chain"]
+        "{}/public/{}".format(config_vars["artifact_dir"], config_vars["payload"]["chain"])
     ])
     return save_command
