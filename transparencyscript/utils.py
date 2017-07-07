@@ -26,14 +26,19 @@ def make_transparency_name(tree_head_hex, version, product):
     return name
 
 
-# Return values from config.json - the default set of configurations
-def get_config_vars(config_path):
-    if os.path.exists(config_path):
-        with open(config_path) as config_file:
-            config_vars = json.load(config_file)
-        return config_vars
+# Return values from script_config.json - the default set of configurations
+def get_config_vars():
+    if len(sys.argv) > 1:
+        config_path = sys.argv[1]
+        if os.path.exists(config_path):
+            with open(config_path) as config_file:
+                config_vars = json.load(config_file)
+            return config_vars
+        else:
+            print("ERROR: Given script_config.json file does not exist.")
+            sys.exit(1)
     else:
-        print("ERROR: script_config.json must exist in current directory.")
+        print("ERROR: script_config.json path is required as an argument.")
         sys.exit(1)
 
 
@@ -48,7 +53,7 @@ def get_password_vars(password_path):
         sys.exit(1)
 
 
-# Return values from task.json - file created when scriptworker is run to store payload variables
+# Return values from task.json if path is given in config.sjon - file created when when scriptworker task begins
 def get_task_vars(task_path):
     if os.path.exists(task_path):
         with open(task_path) as task_file:
@@ -101,7 +106,7 @@ def get_lego_command(config_vars, base_name, trans_name):
         " --domains {}".format(base_name),
         " --domains {}".format(trans_name),
         " --email {}".format(config_vars["payload"]["contact"]),
-        " --path {}/lego".format(config_vars["work_dir"]),  # Comment when testing locally
+        " --path {}/lego".format(config_vars["work_dir"]),
         " --accept-tos",
         "run"
     ])
@@ -112,8 +117,7 @@ def get_lego_command(config_vars, base_name, trans_name):
 def get_save_command(config_vars, base_name):
     save_command = " ".join([
         "mv",
-        # "./.lego/certificates/{}.crt".format(base_name), # Uncomment when testing locally
         "{}/lego/certificates/{}.crt".format(config_vars["work_dir"], base_name),
-        "{}/public/{}".format(config_vars["artifact_dir"], config_vars["payload"]["chain"])
+        "{}/{}".format(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
     ])
     return save_command

@@ -13,18 +13,15 @@ def main(name=None):
         return
 
     # Store default parameters and keys in config_vars
-    config_path = os.path.join('/builds/scriptworker', 'script_config.json')
-    # config_path = os.path.join(os.getcwd(), 'config.json') # Uncomment when testing locally
-    config_vars = get_config_vars(config_path)
+    config_vars = get_config_vars()
 
     # Store AWS credentials in password_vars
-    password_path = os.path.join('/builds/scriptworker', 'passwords.json')
-    # password_path = os.path.join(os.getcwd(), 'passwords.json') # Uncomment when testing locally
+    password_path = os.path.join(config_vars["scriptworker_dir"], 'passwords.json')
     password_vars = get_password_vars(password_path)
 
     # Concatenate local config_vars with task_vars created from task.json
-    if len(sys.argv) > 1:
-        task_path = sys.argv[1]
+    if "task_json" in config_vars:
+        task_path = config_vars["task_json"]
         task_vars = get_task_vars(task_path)
         config_vars = get_transparency_vars(config_vars, task_vars)
 

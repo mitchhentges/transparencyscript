@@ -1,0 +1,13 @@
+{
+  "scriptworker_dir": ".",
+  "work_dir": ".",
+  "public_artifact_dir": ".",
+  "lego-path": "/Users/btang/go/bin/lego",
+  "payload": {
+    "stage-product": "firefox",
+    "version": "53.0b5",
+    "contact": "btang@mozilla.com",
+    "summary": "https://ipv.sx/tmp/SHA256SUMMARY",
+    "chain": "TRANSPARENCY.pem"
+  }
+}
