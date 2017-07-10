@@ -13,7 +13,12 @@ def main(name=None):
         return
 
     # Store default parameters and keys in config_vars
-    config_vars = get_config_vars()
+    if len(sys.argv) > 1:
+        config_path = sys.argv[1]
+        config_vars = get_config_vars(config_path)
+    else:
+        print("ERROR: script_config.json path is required as an argument.")
+        sys.exit(1)
 
     # Store AWS credentials in password_vars
     password_path = os.path.join(config_vars["scriptworker_dir"], 'passwords.json')

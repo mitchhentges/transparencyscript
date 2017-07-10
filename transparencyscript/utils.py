@@ -27,18 +27,13 @@ def make_transparency_name(tree_head_hex, version, product):
 
 
 # Return values from script_config.json - the default set of configurations
-def get_config_vars():
-    if len(sys.argv) > 1:
-        config_path = sys.argv[1]
-        if os.path.exists(config_path):
-            with open(config_path) as config_file:
-                config_vars = json.load(config_file)
-            return config_vars
-        else:
-            print("ERROR: Given script_config.json file does not exist.")
-            sys.exit(1)
+def get_config_vars(config_path):
+    if os.path.exists(config_path):
+        with open(config_path) as config_file:
+            config_vars = json.load(config_file)
+        return config_vars
     else:
-        print("ERROR: script_config.json path is required as an argument.")
+        print("ERROR: Given script_config.json file does not exist.")
         sys.exit(1)
 
 

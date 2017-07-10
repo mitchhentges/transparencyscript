@@ -82,7 +82,7 @@ def test_get_lego_env():
 def test_get_lego_command():
     correct_lego_command = "/Users/btang/go/bin/lego  --dns route53  --domains invalid.stage.fx-trans.net  --domains " \
                            "eae00f676fc07354cd509994f9946956.462805e6950aacba4c1bc9028880efc2.53-0b5.firefox.0." \
-                           "stage.fx-trans.net  --email btang@mozilla.com  --path /builds/scriptworker/work/lego  " \
+                           "stage.fx-trans.net  --email btang@mozilla.com  --path ./lego  " \
                            "--accept-tos run"
 
     config_vars = get_fake_config()
@@ -104,7 +104,7 @@ def test_get_lego_command():
 
 
 def test_get_save_command():
-    correct_save_command = "mv /builds/scriptworker/work/lego/certificates/invalid.stage.fx-trans.net.crt " \
+    correct_save_command = "mv ./lego/certificates/invalid.stage.fx-trans.net.crt " \
                            "TRANSPARENCY.pem"
 
     config_vars = get_fake_config()

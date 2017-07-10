@@ -34,7 +34,7 @@ artifact_upload_timeout: 1200
 task_max_timeout: 1200
 
 # This is the command line to execute the task.
-task_script: ["bash", "-c", "transparency-venv/bin/python transparencyscript/script.py /tmp/work/task.json"]
+task_script: ["bash", "-c", "transparency-venv/bin/python transparencyscript/script.py script_config.json"]
 
 # debug logging?
 verbose: true

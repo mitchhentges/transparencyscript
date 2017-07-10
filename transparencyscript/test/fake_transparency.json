@@ -1,5 +1,7 @@
 {
-  "work_dir": "/builds/scriptworker/work",
+  "scriptworker_dir": ".",
+  "work_dir": ".",
+  "public_artifact_dir": ".",
   "lego-path": "/Users/btang/go/bin/lego",
   "payload": {
     "chain": "TRANSPARENCY.pem",
