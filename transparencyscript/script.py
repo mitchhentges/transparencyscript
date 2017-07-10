@@ -44,7 +44,7 @@ def main(name=None):
     lego_env = get_lego_env(password_vars)
     lego_command = get_lego_command(config_vars, base_name, trans_name)
     save_command = get_save_command(config_vars, base_name)
-    cleanup_command = "rm -rf ./.lego"
+    cleanup_command = "rm -rf {}/lego".format(config_vars["work_dir"])
 
     check_call(lego_command, env=lego_env, shell=True)
     check_call(save_command, shell=True)
