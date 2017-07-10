@@ -21,7 +21,7 @@ def main(name=None):
         sys.exit(1)
 
     # Store AWS credentials in password_vars
-    password_path = os.path.join(config_vars["scriptworker_dir"], 'passwords.json')
+    password_path = os.path.join(os.path.dirname(config_path), 'passwords.json')
     password_vars = get_password_vars(password_path)
 
     # Concatenate local config_vars with task_vars created from task.json

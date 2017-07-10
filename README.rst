@@ -14,7 +14,6 @@ Testing
     ::
 
         {
-            "scriptworker_dir": ".",
             "work_dir": ".",
             "public_artifact_dir": ".",
             "lego-path": "/Users/btang/go/bin/lego",
