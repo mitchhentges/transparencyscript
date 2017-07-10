@@ -6,10 +6,10 @@ Testing
 
 #. Clone the repo:
    ``git clone https://github.com/BrandonTang/binary-transparency.git``
-#. Setup a python3 virtualenv and install required packages:
-   ``pip install -r requirements.txt``
-#. Create a script_config.json file referring to config\_example.json, that
-   looks like:
+#. Setup a python3 virtualenv named transparencyscript-venv, activate, and install required packages:
+   ``virtualenv -p python3 transparency-venv`` & ``source transparency-venv/bin/activate`` & ``pip install -r requirements.txt``
+#. Install transparencyscript in developer mode into the virtualenv: ``pip install -e .``
+#. Create a script_config.json file referring to script\_config\_example.json, that looks like:
 
     ::
 
@@ -28,8 +28,21 @@ Testing
         }
 
 
+#. Create a passwords.json file referring to passwords\_example.json, that looks like:
+
+    ::
+
+        {
+            "AWS_KEYS": {
+                "AWS_ACCESS_KEY_ID": "*****",
+                "AWS_SECRET_ACCESS_KEY": "*****"
+            }
+        }
+
+
+
 #. Run the script and pass in the script_config file that is required:
-   ``venv/bin/python transparencyscript/script.py script_config.json``
+   ``transparency-venv/bin/python transparencyscript/script.py script_config.json``
 #. If using values from local task.json, add a task_json path to the script_config.json and run the previous command:
    ``"task_json": "/tmp/work/task.json"``
 #. If using taskcluster to create task.json, put values in payload of task, then run scriptworker:
