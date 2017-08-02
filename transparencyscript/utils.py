@@ -3,10 +3,13 @@ import re
 import json
 import sys
 import requests
+import pem
+import base64
 
 from redo import retry
+from OpenSSL import crypto
 
-from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
+from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX, ERROR
 
 
 # Create transparency name for required lego_command parameter
@@ -116,3 +119,66 @@ def get_save_command(config_vars, base_name):
         "{}/{}".format(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
     ])
     return save_command
+
+
+def get_chain(config_vars):
+    r = requests.get(config_vars["chain"])
+    r.raise_for_status()
+    return r.text
+
+
+def append_chain(chain):
+    req = {"chain": []}
+    chain = pem.parse(chain)
+    for i in range(len(chain)):
+        cert = crypto.load_certificate(crypto.FILETYPE_PEM, str(chain[i]))
+        der = crypto.dump_certificate(crypto.FILETYPE_ASN1, cert)
+        req["chain"].append(base64.b64encode(der))
+    return req
+
+
+def post_chain(config_vars, req):
+    r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=req)
+    r.raise_for_status()
+    return r.json()
+
+
+def write_to_file(self, file_path, contents, verbose=True,
+                  open_mode='w', create_parent_dir=False,
+                  error_level=ERROR):
+    """ Write `contents` to `file_path`, according to `open_mode`.
+
+    Args:
+        file_path (str): filepath where the content will be written to.
+        contents (str): content to write to the filepath.
+        verbose (bool, optional): whether or not to log `contents` value.
+                                  Defaults to `True`
+        open_mode (str, optional): open mode to use for openning the file.
+                                   Defaults to `w`
+        create_parent_dir (bool, optional): whether or not to create the
+                                            parent directory of `file_path`
+        error_level (str, optional): log level to use on error. Defaults to `ERROR`
+
+    Returns:
+        str: `file_path` on success
+        None: on error.
+    """
+    self.info("Writing to file %s" % file_path)
+    if verbose:
+        self.info("Contents:")
+        for line in contents.splitlines():
+            self.info(" %s" % line)
+    if create_parent_dir:
+        parent_dir = os.path.dirname(file_path)
+        self.mkdir_p(parent_dir, error_level=error_level)
+    try:
+        fh = open(file_path, open_mode)
+        try:
+            fh.write(contents)
+        except UnicodeEncodeError:
+            fh.write(contents.encode('utf-8', 'replace'))
+        fh.close()
+        return file_path
+    except IOError:
+        self.log("%s can't be opened for writing!" % file_path,
+                 level=error_level)

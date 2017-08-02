@@ -2,10 +2,13 @@ import os
 import sys
 
 from subprocess import check_call
+from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
-    get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command
+    get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command, get_chain, append_chain, \
+    post_chain, write_to_file
+from transparencyscript.signed_certificate_timestamp import SignedCertificateTimestamp
 
 
 def main(name=None):
@@ -49,6 +52,17 @@ def main(name=None):
     check_call(lego_command, env=lego_env, shell=True)
     check_call(save_command, shell=True)
     check_call(cleanup_command, shell=True)
+
+    # Submit chain to certificate transparency log
+    request_chain = get_chain(config_vars)
+    chain = retry(request_chain)
+    req = append_chain(chain)
+
+    response_chain = post_chain(config_vars, req)
+    resp = retry(response_chain)
+
+    sct = SignedCertificateTimestamp(resp)
+    write_to_file(config_vars["sct_filename"], sct.to_rfc6962())
 
 
 main(name=__name__)
