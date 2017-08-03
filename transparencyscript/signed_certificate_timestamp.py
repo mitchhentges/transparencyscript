@@ -3,6 +3,7 @@
 import struct
 import base64
 
+
 class SignedCertificateTimestamp:
     """
     Represents a Signed Certificate Timestamp from a Certificate Transparency
@@ -75,7 +76,6 @@ class SignedCertificateTimestamp:
             if 'extensions' in response_json:
                 self.extensions = base64.b64decode(response_json['extensions'])
 
-
     @staticmethod
     def from_rfc6962(serialized):
         start = 0
@@ -83,8 +83,8 @@ class SignedCertificateTimestamp:
         if len(serialized) < start + read:
             raise Exception('SCT too short for version, log ID, and timestamp')
         version, = struct.unpack('B', serialized[0])
-        log_id = serialized[1:1+32]
-        timestamp, = struct.unpack('!Q', serialized[1+32:1+32+8])
+        log_id = serialized[1:1 + 32]
+        timestamp, = struct.unpack('!Q', serialized[1 + 32:1 + 32 + 8])
         start += read
 
         if version is not SignedCertificateTimestamp.SCT_VERSION:
@@ -93,7 +93,7 @@ class SignedCertificateTimestamp:
         read = 2
         if len(serialized) < start + read:
             raise Exception('SCT too short for extension length')
-        ext_len, = struct.unpack('!H', serialized[start:start+read])
+        ext_len, = struct.unpack('!H', serialized[start:start + read])
         start += read
 
         read = ext_len
@@ -105,13 +105,13 @@ class SignedCertificateTimestamp:
         read = 4
         if len(serialized) < start + read:
             raise Exception('SCT too short for signature header')
-        alg, sig_len, = struct.unpack('!HH', serialized[start:start+read])
+        alg, sig_len, = struct.unpack('!HH', serialized[start:start + read])
         start += read
 
         read = sig_len
         if len(serialized) < start + read:
             raise Exception('SCT too short for signature')
-        sig = serialized[start:start+read]
+        sig = serialized[start:start + read]
 
         sct = SignedCertificateTimestamp()
         sct.id = log_id
@@ -119,7 +119,6 @@ class SignedCertificateTimestamp:
         sct.extensions = extensions
         sct.signature = struct.pack('!HH', alg, sig_len) + sig
         return sct
-
 
     def to_rfc6962(self):
         version = struct.pack("B", self.version)

@@ -6,8 +6,8 @@ from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
-    get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command, get_chain, append_chain, \
-    post_chain, write_to_file
+    get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command, get_chain, post_chain, \
+    write_to_file
 from transparencyscript.signed_certificate_timestamp import SignedCertificateTimestamp
 
 
@@ -54,10 +54,7 @@ def main(name=None):
     check_call(cleanup_command, shell=True)
 
     # Submit chain to certificate transparency log
-    request_chain = get_chain(config_vars)
-    chain = retry(request_chain)
-    req = append_chain(chain)
-
+    req = get_chain(config_vars)
     response_chain = post_chain(config_vars, req)
     resp = retry(response_chain)
 

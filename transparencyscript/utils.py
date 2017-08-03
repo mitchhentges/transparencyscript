@@ -122,14 +122,8 @@ def get_save_command(config_vars, base_name):
 
 
 def get_chain(config_vars):
-    r = requests.get(config_vars["chain"])
-    r.raise_for_status()
-    return r.text
-
-
-def append_chain(chain):
     req = {"chain": []}
-    chain = pem.parse(chain)
+    chain = pem.parse("{}/{}".format(config_vars["public_artifact_dir"], config_vars["payload"]["chain"]))
     for i in range(len(chain)):
         cert = crypto.load_certificate(crypto.FILETYPE_PEM, str(chain[i]))
         der = crypto.dump_certificate(crypto.FILETYPE_ASN1, cert)
@@ -143,7 +137,7 @@ def post_chain(config_vars, req):
     return r.json()
 
 
-def write_to_file(self, file_path, contents, verbose=True,
+def write_to_file(file_path, contents, verbose=True,
                   open_mode='w', create_parent_dir=False,
                   error_level=ERROR):
     """ Write `contents` to `file_path`, according to `open_mode`.
@@ -163,14 +157,14 @@ def write_to_file(self, file_path, contents, verbose=True,
         str: `file_path` on success
         None: on error.
     """
-    self.info("Writing to file %s" % file_path)
+    print("Writing to file %s" % file_path)
     if verbose:
-        self.info("Contents:")
+        print("Contents:")
         for line in contents.splitlines():
-            self.info(" %s" % line)
+            print(" %s" % line)
     if create_parent_dir:
         parent_dir = os.path.dirname(file_path)
-        self.mkdir_p(parent_dir, error_level=error_level)
+        os.makedirs(parent_dir)
     try:
         fh = open(file_path, open_mode)
         try:
@@ -180,5 +174,4 @@ def write_to_file(self, file_path, contents, verbose=True,
         fh.close()
         return file_path
     except IOError:
-        self.log("%s can't be opened for writing!" % file_path,
-                 level=error_level)
+        print("%s can't be opened for writing!" % file_path)
