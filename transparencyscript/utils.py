@@ -123,7 +123,8 @@ def get_save_command(config_vars, base_name):
 
 def get_chain(config_vars):
     req = {"chain": []}
-    chain = pem.parse("{}/{}".format(config_vars["public_artifact_dir"], config_vars["payload"]["chain"]))
+    chain_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), config_vars["payload"]["chain"])
+    chain = pem.parse(open(chain_file, 'rb').read())
     for i in range(len(chain)):
         cert = crypto.load_certificate(crypto.FILETYPE_PEM, str(chain[i]))
         der = crypto.dump_certificate(crypto.FILETYPE_ASN1, cert)
@@ -132,7 +133,7 @@ def get_chain(config_vars):
 
 
 def post_chain(config_vars, req):
-    r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=req)
+    r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=str(req))
     r.raise_for_status()
     return r.json()
 

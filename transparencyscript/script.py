@@ -59,7 +59,7 @@ def main(name=None):
     resp = retry(response_chain)
 
     sct = SignedCertificateTimestamp(resp)
-    write_to_file(config_vars["sct_filename"], sct.to_rfc6962())
+    write_to_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), config_vars["sct_filename"]), sct.to_rfc6962())
 
 
 main(name=__name__)
