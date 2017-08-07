@@ -55,8 +55,7 @@ def main(name=None):
 
     # Submit chain to certificate transparency log
     req = get_chain(config_vars)
-    response_chain = post_chain(config_vars, req)
-    resp = retry(response_chain)
+    resp = retry(post_chain, args=(req,))
 
     sct = SignedCertificateTimestamp(resp)
     write_to_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), config_vars["sct_filename"]), sct.to_rfc6962())

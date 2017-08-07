@@ -2,7 +2,7 @@
   "work_dir": ".",
   "public_artifact_dir": ".",
   "lego-path": "/Users/btang/go/bin/lego",
-  "log_url": "http://ct.googleapis.com/pilot",
+  "log_url": "https://ct.googleapis.com/pilot",
   "sct_filename": "sct_file.txt",
   "payload": {
     "stage-product": "firefox",

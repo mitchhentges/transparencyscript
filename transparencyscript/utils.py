@@ -13,6 +13,7 @@ from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFF
 
 
 # Create transparency name for required lego_command parameter
+
 def make_transparency_name(tree_head_hex, version, product):
     version = re.sub("\.", "-", version)
 
@@ -122,18 +123,33 @@ def get_save_command(config_vars, base_name):
 
 
 def get_chain(config_vars):
-    req = {"chain": []}
-    chain_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), config_vars["payload"]["chain"])
-    chain = pem.parse(open(chain_file, 'rb').read())
-    for i in range(len(chain)):
-        cert = crypto.load_certificate(crypto.FILETYPE_PEM, str(chain[i]))
-        der = crypto.dump_certificate(crypto.FILETYPE_ASN1, cert)
-        req["chain"].append(base64.b64encode(der))
+    chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"]) # Relative path to TRANSPARENCY.pem
+
+    certdata = []
+    with open(chain_file) as f:
+        lines = ''.join(f.readlines())
+        lines = lines.split("-----BEGIN CERTIFICATE-----\n")
+        for line in lines:
+            line = line.replace("-----END CERTIFICATE-----", "")
+            line = line.replace("\r", "")
+            line = line.replace("\n", "")
+            certdata.append(line)
+        del certdata[0]
+    req = '{"chain" : ["' + '", "'.join(certdata) + '"]}'
+
+    # req = {"chain": []}
+    # chain = pem.parse(open(chain_file, 'rb').read())
+    # for i in range(len(chain)):
+    #     cert = crypto.load_certificate(crypto.FILETYPE_PEM, str(chain[i]))
+    #     der = crypto.dump_certificate(crypto.FILETYPE_ASN1, cert)
+    #     req["chain"].append(base64.b64encode(der))
+
     return req
 
 
 def post_chain(config_vars, req):
-    r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=str(req))
+    r = requests.post(config_vars["log_url"] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+    # r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=str(req))
     r.raise_for_status()
     return r.json()
 
