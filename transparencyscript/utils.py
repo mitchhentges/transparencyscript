@@ -149,13 +149,23 @@ def get_chain(config_vars):
 
 def post_chain(config_vars, req):
     r = requests.post(config_vars["log_url"] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+    if r.status_code != 200:
+        print(r.text)
+    else:
+        r = json.loads(r.text)
+        print("\tSCT Version", r['sct_version'])
+        print("\tID", r['id'])
+        print("\tTimestamp", r['timestamp'])
+        print("\tExtensions", r['extensions'])
+        print("\tSignature", r['signature'])
+    return r
     # r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=str(req))
-    r.raise_for_status()
-    return r.json()
+    # r.raise_for_status()
+    # return r.json()
 
 
 def write_to_file(file_path, contents, verbose=True,
-                  open_mode='w', create_parent_dir=False,
+                  open_mode='wb', create_parent_dir=False,
                   error_level=ERROR):
     """ Write `contents` to `file_path`, according to `open_mode`.
 
@@ -189,6 +199,5 @@ def write_to_file(file_path, contents, verbose=True,
         except UnicodeEncodeError:
             fh.write(contents.encode('utf-8', 'replace'))
         fh.close()
-        return file_path
     except IOError:
         print("%s can't be opened for writing!" % file_path)
