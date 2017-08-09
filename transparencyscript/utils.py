@@ -123,7 +123,7 @@ def get_save_command(config_vars, base_name):
 
 
 def get_chain(config_vars):
-    chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"]) # Relative path to TRANSPARENCY.pem
+    chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
 
     certdata = []
     with open(chain_file) as f:
@@ -137,35 +137,32 @@ def get_chain(config_vars):
         del certdata[0]
     req = '{"chain" : ["' + '", "'.join(certdata) + '"]}'
 
-    # req = {"chain": []}
-    # chain = pem.parse(open(chain_file, 'rb').read())
-    # for i in range(len(chain)):
-    #     cert = crypto.load_certificate(crypto.FILETYPE_PEM, str(chain[i]))
-    #     der = crypto.dump_certificate(crypto.FILETYPE_ASN1, cert)
-    #     req["chain"].append(base64.b64encode(der))
-
     return req
 
 
-def post_chain(config_vars, req):
-    r = requests.post(config_vars["log_url"] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
-    if r.status_code != 200:
-        print(r.text)
-    else:
-        r = json.loads(r.text)
-        print("\tSCT Version", r['sct_version'])
-        print("\tID", r['id'])
-        print("\tTimestamp", r['timestamp'])
-        print("\tExtensions", r['extensions'])
-        print("\tSignature", r['signature'])
-    return r
-    # r = requests.post(config_vars["log_url"] + '/ct/v1/add-chain', json=str(req))
-    # r.raise_for_status()
-    # return r.json()
+def post_chain(LOGS, req):
+    resp_list = []
+
+    for log in LOGS.keys():
+        r = requests.post(LOGS[log] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+
+        if r.status_code != 200:
+            print(r.text)
+        else:
+            r = json.loads(r.text)
+            print("\tSCT Version", r['sct_version'])
+            print("\tID", r['id'])
+            print("\tTimestamp", r['timestamp'])
+            print("\tExtensions", r['extensions'])
+            print("\tSignature", r['signature'])
+
+        resp_list.append(r)
+
+    return resp_list
 
 
 def write_to_file(file_path, contents, verbose=True,
-                  open_mode='wb', create_parent_dir=False,
+                  open_mode='ab', create_parent_dir=False,
                   error_level=ERROR):
     """ Write `contents` to `file_path`, according to `open_mode`.
 
