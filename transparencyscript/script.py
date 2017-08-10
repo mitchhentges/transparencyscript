@@ -3,7 +3,7 @@ import sys
 
 from subprocess import check_call
 
-from transparencyscript.constants import TRANSPARENCY_SUFFIX, LOGS
+from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
     get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command, get_chain, post_chain, \
     write_to_file
@@ -54,11 +54,17 @@ def main(name=None):
 
     # Submit chain to certificate transparency log
     req = get_chain(config_vars)
-    resp_list = post_chain(LOGS, req)
+    resp_list = post_chain(config_vars, req)
+
+    sct_file_path = os.path.join(config_vars["public_artifact_dir"], config_vars["sct_filename"])
+    try:
+        os.remove(sct_file_path)
+    except OSError:
+        pass
 
     for resp in resp_list:
         sct = SignedCertificateTimestamp(resp)
-        write_to_file(os.path.join(config_vars["public_artifact_dir"], config_vars["sct_filename"]), sct.to_rfc6962())
+        write_to_file(sct_file_path, sct.to_rfc6962())
 
 
 main(name=__name__)

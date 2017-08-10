@@ -3,17 +3,13 @@ import re
 import json
 import sys
 import requests
-import pem
-import base64
 
 from redo import retry
-from OpenSSL import crypto
 
 from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX, ERROR
 
 
 # Create transparency name for required lego_command parameter
-
 def make_transparency_name(tree_head_hex, version, product):
     version = re.sub("\.", "-", version)
 
@@ -122,6 +118,7 @@ def get_save_command(config_vars, base_name):
     return save_command
 
 
+# Use chain file obtained from Let's Encrypt to create json of certificates
 def get_chain(config_vars):
     chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
 
@@ -140,11 +137,13 @@ def get_chain(config_vars):
     return req
 
 
-def post_chain(LOGS, req):
+# Using certificates json, retrieve SCTs through post requests to CT logs
+def post_chain(config_vars, req):
     resp_list = []
+    log_list = config_vars["log_list"]
 
-    for log in LOGS.keys():
-        r = requests.post(LOGS[log] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+    for log in log_list.keys():
+        r = requests.post(log_list[log] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
 
         if r.status_code != 200:
             print(r.text)

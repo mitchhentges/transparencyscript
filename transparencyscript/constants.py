@@ -1,8 +1,3 @@
-LOGS = {
-    'pilot': 'https://ct.googleapis.com/pilot',
-    'rocketeer': 'https://ct.googleapis.com/rocketeer',
-}
-
 TRANSPARENCY_VERSION = "0"
 TRANSPARENCY_SUFFIX = "stage.fx-trans.net"
 
