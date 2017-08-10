@@ -1,7 +1,12 @@
 {
   "work_dir": ".",
-  "public_artifact_dir": ".",
+  "public_artifact_dir": "./transparencyscript/test",
   "lego-path": "/Users/btang/go/bin/lego",
+  "sct_filename": "sct_list.bin",
+  "log_list": {
+    "pilot": "https://ct.googleapis.com/pilot",
+    "rocketeer": "https://ct.googleapis.com/rocketeer"
+  },
   "payload": {
     "chain": "TRANSPARENCY.pem",
     "contact": "btang-test@mozilla.com",

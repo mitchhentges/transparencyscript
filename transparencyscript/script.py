@@ -56,12 +56,14 @@ def main(name=None):
     req = get_chain(config_vars)
     resp_list = post_chain(config_vars, req)
 
+    # Remove sct_list file if it already exists
     sct_file_path = os.path.join(config_vars["public_artifact_dir"], config_vars["sct_filename"])
     try:
         os.remove(sct_file_path)
     except OSError:
         pass
 
+    # Append to sct_list file for each chain
     for resp in resp_list:
         sct = SignedCertificateTimestamp(resp)
         write_to_file(sct_file_path, sct.to_rfc6962())

@@ -1,12 +1,17 @@
 {
   "work_dir": ".",
-  "public_artifact_dir": ".",
+  "public_artifact_dir": "./transparencyscript/test",
   "lego-path": "/Users/btang/go/bin/lego",
+  "sct_filename": "sct_list.bin",
+  "log_list": {
+    "pilot": "https://ct.googleapis.com/pilot",
+    "rocketeer": "https://ct.googleapis.com/rocketeer"
+  },
   "payload": {
     "stage-product": "firefox",
     "version": "53.0b5",
     "contact": "btang@mozilla.com",
     "summary": "https://ipv.sx/tmp/SHA256SUMMARY",
-    "chain": "TRANSPARENCY.pem"
+    "chain": "FAKE_TRANSPARENCY.pem"
   }
 }
