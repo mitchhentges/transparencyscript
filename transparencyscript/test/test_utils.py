@@ -138,6 +138,9 @@ def test_post_chain():
                 r = requests.post("https://ct.googleapis.com/rocketeer" + "/ct/v1/add-chain", data=req, verify=False,
                                    timeout=2).text
 
+        else:
+            assert False
+
         r = json.loads(r)
 
         resp_list.append(r)
