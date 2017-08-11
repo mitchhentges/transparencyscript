@@ -7,8 +7,9 @@
     "pilot": "https://ct.googleapis.com/pilot",
     "rocketeer": "https://ct.googleapis.com/rocketeer"
   },
+  "task_json": "./transparencyscript/test/fake_task.json",
   "payload": {
-    "chain": "TRANSPARENCY.pem",
+    "chain": "FAKE_TRANSPARENCY.pem",
     "contact": "btang-test@mozilla.com",
     "image": "ubuntu:13.10",
     "maxRunTime": 600,
