@@ -3,6 +3,7 @@ import re
 import json
 import sys
 import requests
+import subprocess
 
 from redo import retry
 
@@ -197,3 +198,22 @@ def write_to_file(file_path, contents, verbose=True,
         fh.close()
     except IOError:
         print("%s can't be opened for writing!" % file_path)
+
+
+# Converts intermediate of certificate to readable spki file
+def get_spki(config_vars):
+    certificate = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
+
+    with open(certificate) as f:
+        lines = ''.join(f.readlines())
+        issuer_cert = lines.split("-----END CERTIFICATE-----\n")[1] + "-----END CERTIFICATE-----\n"
+
+        spki_file = os.path.join(config_vars["public_artifact_dir"], config_vars["spki_filename"])
+        fh = open(spki_file, 'w')
+        fh.write(issuer_cert)
+        fh.close()
+
+    cert_txt = subprocess.check_output(["openssl", "x509", "-text", "-noout", "-in", spki_file])
+    fh = open(spki_file, 'wb')
+    fh.write(cert_txt)
+    fh.close()

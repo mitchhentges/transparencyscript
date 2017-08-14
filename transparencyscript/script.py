@@ -6,7 +6,7 @@ from subprocess import check_call
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
     get_transparency_vars, get_tree_head, get_lego_env, get_lego_command, get_save_command, get_chain, post_chain, \
-    write_to_file
+    write_to_file, get_spki
 from transparencyscript.signed_certificate_timestamp import SignedCertificateTimestamp
 
 
@@ -68,6 +68,9 @@ def main(name=None):
         for resp in resp_list:
             sct = SignedCertificateTimestamp(resp)
             write_to_file(sct_file_path, sct.to_rfc6962())
+
+    # Create spki file using issuer certificate's public key
+    get_spki(config_vars)
 
 
 main(name=__name__)

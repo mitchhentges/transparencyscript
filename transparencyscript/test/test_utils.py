@@ -10,7 +10,8 @@ from transparencyscript.constants import SUMMARY_TEXT, TRANSPARENCY_SUFFIX
 
 
 def test_make_transparency_name():
-    correct_name = "eae00f676fc07354cd509994f9946956.462805e6950aacba4c1bc9028880efc2.53-0b5.firefox.0.stage.fx-trans.net"
+    correct_name = "eae00f676fc07354cd509994f9946956.462805e6950aacba4c1bc9028880efc2.53-0b5.firefox.0.stage." \
+                   "fx-trans.net"
 
     tree_head_hex = "eae00f676fc07354cd509994f9946956462805e6950aacba4c1bc9028880efc2"
     version = "53.0b5"
@@ -112,8 +113,10 @@ def test_get_chain():
 
 
 def test_post_chain():
-    correct_resp_list = [{'sct_version': 0, 'id': 'testid1', 'timestamp': 12345, 'extensions': '', 'signature': 'signature1'},
-                         {'sct_version': 0, 'id': 'testid2', 'timestamp': 54321, 'extensions': '', 'signature': 'signature2'}]
+    correct_resp_list = [{'sct_version': 0, 'id': 'testid1', 'timestamp': 12345, 'extensions': '',
+                          'signature': 'signature1'},
+                         {'sct_version': 0, 'id': 'testid2', 'timestamp': 54321, 'extensions': '',
+                          'signature': 'signature2'}]
 
     config_vars = get_fake_config()
     req = '{"chain" : ["CERTIFICATE1", "CERTIFICATE2"]}'
