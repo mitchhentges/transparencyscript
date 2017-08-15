@@ -67,10 +67,12 @@ def main(name=None):
         # Append to sct_list file for each chain
         for resp in resp_list:
             sct = SignedCertificateTimestamp(resp)
-            write_to_file(sct_file_path, sct.to_rfc6962())
+            write_to_file(sct_file_path, sct.to_rfc6962(), open_mode='ab')
 
     # Create spki file using issuer certificate's public key
-    get_spki(config_vars)
+    spki = get_spki(config_vars)
+    spki_file_path = os.path.join(config_vars["public_artifact_dir"], config_vars["spki_filename"])
+    write_to_file(spki_file_path, spki, open_mode='w')
 
 
 main(name=__name__)

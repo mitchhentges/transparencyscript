@@ -4,6 +4,7 @@ import json
 import sys
 import requests
 import subprocess
+import hashlib
 
 from redo import retry
 
@@ -161,59 +162,26 @@ def post_chain(config_vars, req):
     return resp_list
 
 
-def write_to_file(file_path, contents, verbose=True,
-                  open_mode='ab', create_parent_dir=False,
-                  error_level=ERROR):
-    """ Write `contents` to `file_path`, according to `open_mode`.
-
-    Args:
-        file_path (str): filepath where the content will be written to.
-        contents (str): content to write to the filepath.
-        verbose (bool, optional): whether or not to log `contents` value.
-                                  Defaults to `True`
-        open_mode (str, optional): open mode to use for openning the file.
-                                   Defaults to `w`
-        create_parent_dir (bool, optional): whether or not to create the
-                                            parent directory of `file_path`
-        error_level (str, optional): log level to use on error. Defaults to `ERROR`
-
-    Returns:
-        str: `file_path` on success
-        None: on error.
-    """
+# Write 'contents' to 'file_path' according to 'open_mode' with optional verbose parameter
+def write_to_file(file_path, contents, open_mode, verbose=False):
     print("Writing to file %s" % file_path)
+
     if verbose:
         print("Contents:")
         for line in contents.splitlines():
             print(" %s" % line)
-    if create_parent_dir:
-        parent_dir = os.path.dirname(file_path)
-        os.makedirs(parent_dir)
-    try:
-        fh = open(file_path, open_mode)
-        try:
-            fh.write(contents)
-        except UnicodeEncodeError:
-            fh.write(contents.encode('utf-8', 'replace'))
-        fh.close()
-    except IOError:
-        print("%s can't be opened for writing!" % file_path)
+
+    with open(file_path, open_mode) as f:
+        f.write(contents)
 
 
-# Converts intermediate of certificate to readable spki file
+# Converts public key from PEM format to DER format, followed by calculating the SHA256 for the SPKI
 def get_spki(config_vars):
-    certificate = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
+    chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
 
-    with open(certificate) as f:
-        lines = ''.join(f.readlines())
-        issuer_cert = lines.split("-----END CERTIFICATE-----\n")[1] + "-----END CERTIFICATE-----\n"
+    public_key = subprocess.Popen(("openssl", "x509", "-in", chain_file, "-pubkey", "-noout"), stdout=subprocess.PIPE)
+    der_format = subprocess.check_output(("openssl", "rsa", "-pubin", "-outform", "der"), stdin=public_key.stdout)
+    public_key.wait()
+    sha256 = hashlib.sha256(der_format).hexdigest()
 
-        spki_file = os.path.join(config_vars["public_artifact_dir"], config_vars["spki_filename"])
-        fh = open(spki_file, 'w')
-        fh.write(issuer_cert)
-        fh.close()
-
-    cert_txt = subprocess.check_output(["openssl", "x509", "-text", "-noout", "-in", spki_file])
-    fh = open(spki_file, 'wb')
-    fh.write(cert_txt)
-    fh.close()
+    return sha256
