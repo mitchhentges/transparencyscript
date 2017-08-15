@@ -8,7 +8,7 @@ import hashlib
 
 from redo import retry
 
-from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX, ERROR
+from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
 
 
 # Create transparency name for required lego_command parameter
@@ -163,7 +163,7 @@ def post_chain(config_vars, req):
 
 
 # Write 'contents' to 'file_path' according to 'open_mode' with optional verbose parameter
-def write_to_file(file_path, contents, open_mode, verbose=False):
+def write_to_file(file_path, contents, open_mode, verbose=True):
     print("Writing to file %s" % file_path)
 
     if verbose:
