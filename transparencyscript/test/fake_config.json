@@ -3,6 +3,7 @@
   "public_artifact_dir": "./transparencyscript/test",
   "lego-path": "/Users/btang/go/bin/lego",
   "sct_filename": "sct_list.bin",
+  "spki_filename": "spki.txt",
   "log_list": {
     "pilot": "https://ct.googleapis.com/pilot",
     "rocketeer": "https://ct.googleapis.com/rocketeer"

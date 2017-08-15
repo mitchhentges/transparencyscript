@@ -17,6 +17,12 @@ Testing
             "work_dir": ".",
             "public_artifact_dir": ".",
             "lego-path": "/Users/btang/go/bin/lego",
+            "sct_filename": "sct_list.bin",
+            "spki_filename": "spki.txt",
+            "log_list": {
+                "pilot": "https://ct.googleapis.com/pilot",
+                "rocketeer": "https://ct.googleapis.com/rocketeer"
+            },
             "payload": {
                 "stage-product": "firefox",
                 "version": "53.0b5",
@@ -42,8 +48,9 @@ Testing
 
 #. Run the script and pass in the script_config file that is required:
    ``transparency-venv/bin/python transparencyscript/script.py script_config.json``
-#. If using values from local task.json, add a task_json path to the script_config.json and run the previous command:
+#. If using values from local task.json, add a task_json path to the script_config.json, that looks like:
    ``"task_json": "/tmp/work/task.json"``
+   Then, run the previous command.
 #. If using taskcluster to create task.json, put values in payload of task, then run scriptworker:
    ``scriptworker scriptworker.yaml``
 #. For testing: ``pip install pytest`` and ``py.test transparencyscript/test/test_utils.py``
