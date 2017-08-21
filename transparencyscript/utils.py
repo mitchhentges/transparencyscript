@@ -144,9 +144,13 @@ def post_chain(config_vars, req):
     resp_list = []
     log_list = config_vars["log_list"]
 
+    def post(log):
+        r = requests.post(log + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+        return r
+
     for log in log_list:
         try:
-            r = requests.post(log + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+            r = retry(post, args=(log,), sleeptime=0, jitter=0)
         except requests.exceptions.RequestException as e:
             print(log, e)
 

@@ -1,6 +1,7 @@
 import os
 import sys
 
+from redo import retry
 from subprocess import check_call
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
