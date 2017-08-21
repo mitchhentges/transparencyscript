@@ -173,15 +173,3 @@ def write_to_file(file_path, contents, open_mode, verbose=True):
 
     with open(file_path, open_mode) as f:
         f.write(contents)
-
-
-# Converts public key from PEM format to DER format, followed by calculating the SHA256 for the SPKI
-def get_spki(config_vars):
-    chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
-
-    public_key = subprocess.Popen(("openssl", "x509", "-in", chain_file, "-pubkey", "-noout"), stdout=subprocess.PIPE)
-    der_format = subprocess.check_output(("openssl", "rsa", "-pubin", "-outform", "der"), stdin=public_key.stdout)
-    public_key.wait()
-    sha256 = hashlib.sha256(der_format).hexdigest()
-
-    return sha256

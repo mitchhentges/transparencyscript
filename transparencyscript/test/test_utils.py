@@ -4,7 +4,7 @@ import requests_mock
 import json
 
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
-    get_transparency_vars, get_summary, get_lego_env, get_lego_command, get_save_command, get_chain, get_spki
+    get_transparency_vars, get_summary, get_lego_env, get_lego_command, get_save_command, get_chain
 from transparencyscript.test import get_fake_config, get_fake_passwords, get_fake_task, get_fake_transparency
 from transparencyscript.constants import SUMMARY_TEXT, TRANSPARENCY_SUFFIX
 
@@ -184,12 +184,3 @@ def test_post_chain():
         resp_list.append(r)
 
     assert resp_list == correct_resp_list
-
-
-def test_get_spki():
-    correct_spki = '60409ef2665db370cb8bae98dc1302654d8a05fd67553759237e6ed5ecd01116'
-
-    config_vars = get_fake_config()
-    spki = get_spki(config_vars)
-
-    assert spki == correct_spki
