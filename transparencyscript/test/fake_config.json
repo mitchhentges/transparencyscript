@@ -3,10 +3,10 @@
   "public_artifact_dir": "./transparencyscript/test",
   "lego-path": "/Users/btang/go/bin/lego",
   "sct_filename": "sct_list.bin",
-  "log_list": {
-    "pilot": "https://ct.googleapis.com/pilot",
-    "rocketeer": "https://ct.googleapis.com/rocketeer"
-  },
+  "log_list": [
+    "https://ct.googleapis.com/pilot",
+    "https://ct.googleapis.com/rocketeer"
+  ],
   "task_json": "./transparencyscript/test/fake_task.json",
   "payload": {
     "stage-product": "firefox",

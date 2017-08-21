@@ -18,10 +18,10 @@ Testing
             "public_artifact_dir": ".",
             "lego-path": "/Users/btang/go/bin/lego",
             "sct_filename": "sct_list.bin",
-            "log_list": {
-                "pilot": "https://ct.googleapis.com/pilot",
-                "rocketeer": "https://ct.googleapis.com/rocketeer"
-            },
+            "log_list": [
+                "https://ct.googleapis.com/pilot",
+                "https://ct.googleapis.com/rocketeer"
+            ],
             "payload": {
                 "stage-product": "firefox",
                 "version": "53.0b5",

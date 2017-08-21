@@ -159,8 +159,8 @@ def test_post_chain():
     resp_list = []
     log_list = config_vars["log_list"]
 
-    for log in log_list.keys():
-        if log_list[log] == "https://ct.googleapis.com/pilot":
+    for log in log_list:
+        if log == "https://ct.googleapis.com/pilot":
             with requests_mock.Mocker() as m:
                 m.post("https://ct.googleapis.com/pilot" + "/ct/v1/add-chain",
                        text='{"sct_version":0,"id":"testid1","timestamp":12345,"extensions":"",'
@@ -168,7 +168,7 @@ def test_post_chain():
                 r = requests.post("https://ct.googleapis.com/pilot" + "/ct/v1/add-chain", data=req, verify=False,
                                    timeout=2).text
 
-        elif log_list[log] == "https://ct.googleapis.com/rocketeer":
+        elif log == "https://ct.googleapis.com/rocketeer":
             with requests_mock.Mocker() as m:
                 m.post("https://ct.googleapis.com/rocketeer" + "/ct/v1/add-chain",
                        text='{"sct_version":0,"id":"testid2","timestamp":54321,"extensions":"",'
