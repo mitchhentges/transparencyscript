@@ -144,20 +144,23 @@ def post_chain(config_vars, req):
     resp_list = []
     log_list = config_vars["log_list"]
 
-    for log in log_list.keys():
-        r = requests.post(log_list[log] + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+    for log in log_list:
+        try:
+            r = requests.post(log + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+        except requests.exceptions.RequestException as e:
+            print(log, e)
 
         if r.status_code != 200:
-            print(r.text)
+            print(log, r.text)
         else:
             r = json.loads(r.text)
+            print(log)
             print("\tSCT Version", r['sct_version'])
             print("\tID", r['id'])
             print("\tTimestamp", r['timestamp'])
             print("\tExtensions", r['extensions'])
             print("\tSignature", r['signature'])
-
-        resp_list.append(r)
+            resp_list.append(r)
 
     return resp_list
 

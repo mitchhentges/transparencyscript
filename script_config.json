@@ -3,10 +3,28 @@
   "public_artifact_dir": ".",
   "lego-path": "/Users/btang/go/bin/lego",
   "sct_filename": "sct_list.bin",
-  "log_list": {
-    "pilot": "https://ct.googleapis.com/pilot",
-    "rocketeer": "https://ct.googleapis.com/rocketeer"
-  },
+  "log_list": [
+    "https://ct.googleapis.com/pilot",
+    "https://ct.googleapis.com/rocketeer",
+    "https://ct.googleapis.com/icarus",
+    "https://ct.googleapis.com/skydiver",
+    "https://ct1.digicert-ct.com/log",
+    "https://ct.ws.symantec.com",
+    "https://vega.ws.symantec.com",
+    "https://ctlog.api.venafi.com",
+    "https://ctlog.wosign.com",
+    "https://ctlog2.wosign.com",
+    "https://ctserver.cnnic.cn",
+    "https://ct.startssl.com",
+    "https://ct.izenpe.eus",
+    "https://ct.gdca.com.cn",
+    "https://ctlog.gdca.com.cn",
+    "https://ctlog-gen2.api.venafi.com",
+    "https://sirius.ws.symantec.com",
+    "https://ct2.digicert-ct.com/log",
+    "https://mammoth.ct.comodo.com",
+    "https://sabre.ct.comodo.com"
+  ],
   "payload": {
     "stage-product": "firefox",
     "version": "53.0b5",
