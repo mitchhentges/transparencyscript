@@ -139,26 +139,26 @@ def get_chain(config_vars):
 
 
 # Post certificate to log using formatted certificates from chain file
-def post(log, req):
-    resp = requests.post(log + "/ct/v1/add-chain", data=req, timeout=5)
+def post(log_url, req):
+    resp = requests.post(log_url + "/ct/v1/add-chain", data=req, timeout=5)
     return resp
 
 
 # Using certificates json, retrieve SCTs through post requests to CT logs
 def post_chain(log_list, req):
     log = logging.getLogger()
-    # log.setLevel(logging.DEBUG)
-    # handler = logging.StreamHandler(sys.stdout)
-    # handler.setLevel(logging.DEBUG)
-    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    # handler.setFormatter(formatter)
-    # log.addHandler(handler)
+    log.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
 
     resp_list = []
 
     for log_url in log_list:
         try:
-            r = retry(post, args=(log_url, req), sleeptime=2)
+            r = retry(post, args=(log_url, req), sleeptime=3)
         except requests.exceptions.RequestException as e:
             log.debug(log_url + e)
 

@@ -196,10 +196,15 @@ def test_post():
 
 
 def test_post_chain():
-    correct_resp_list = [{'sct_version': 0, 'id': 'testid1', 'timestamp': 12345, 'extensions': '',
-                          'signature': 'signature1'}]
+    correct_resp_list = [
+        {'sct_version': 0, 'id': 'pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=', 'timestamp': 1502213019869,
+         'extensions': '',
+         'signature': 'BAMASDBGAiEAnZ6sJDFXEPxpbhVkiFusLCyoa+848vzGRJnh+2cSB84CIQCLXi3iEjK/uOcbrNnKAdds2wXV1v6xsn4II4jscs6bfQ=='},
+        {'sct_version': 0, 'id': '7ku9t3XOYLrhQmkfq+GeZqMPfl+wctiDAMR7iXqo/cs=', 'timestamp': 1502310328978,
+         'extensions': '',
+         'signature': 'BAMARzBFAiBaFbWY+ni/dsYgmKoeLAb7VVIystdjDyL2v4QQB2JEnwIhAMp4++UrbnERi2WP1yLeT2ENx7aVPJbmGLyvTw1PFdL3'}]
 
-    log_list = get_fake_config()["log_list"][0]
+    log_list = get_fake_config()["log_list"]
     req = '{"chain" : ["MIIFgTCCBGmgAwIBAgISA2RjCEL7JTlwJbUFmX95dBdhMA0GCSqGSIb3DQEBCwUAMEoxCzAJBgNVBAYTAlVTM' \
           'RYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQDExpMZXQncyBFbmNyeXB0IEF1dGhvcml0eSBYMzAeFw0xNzA4MDgxNjE' \
           '3MDBaFw0xNzExMDYxNjE3MDBaMCUxIzAhBgNVBAMTGmludmFsaWQuc3RhZ2UuZngtdHJhbnMubmV0MIIBIjANBgkqhkiG9w0BA' \
@@ -236,12 +241,6 @@ def test_post_chain():
           'pr/1wXKtx8/wApIvJSwtmVi4MFU5aMqrSDE6ea73Mj2tcMyo5jMd6jmeWUHK8so/joWUoHOUgwuX4Po1QYz+3dszkDqMp4fklx' \
           'BwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKE' \
           'kROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg=="]}'
-
-    with requests_mock.Mocker() as m:
-        m.post("https://ct.googleapis.com/pilot" + "/ct/v1/add-chain",
-               text='{"sct_version":0,"id":"testid1","timestamp":12345,"extensions":"",'
-                    '"signature":"signature1"}')
-        r = requests.post("https://ct.googleapis.com/pilot" + "/ct/v1/add-chain", data=req, timeout=5).text
 
     resp_list = post_chain(log_list, req)
 
