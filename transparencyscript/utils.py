@@ -5,7 +5,7 @@ import sys
 import requests
 import subprocess
 import hashlib
-
+import logging
 from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
@@ -126,44 +126,50 @@ def get_chain(config_vars):
 
     certdata = []
     with open(chain_file) as f:
-        lines = ''.join(f.readlines())
+        lines = f.read()
         lines = lines.split("-----BEGIN CERTIFICATE-----\n")
         for line in lines:
             line = line.replace("-----END CERTIFICATE-----", "")
             line = line.replace("\r", "")
             line = line.replace("\n", "")
             certdata.append(line)
-        del certdata[0]
-    req = '{"chain" : ["' + '", "'.join(certdata) + '"]}'
+    req = '{"chain" : ["' + '", "'.join(certdata[1:]) + '"]}'
 
     return req
 
 
 # Using certificates json, retrieve SCTs through post requests to CT logs
-def post_chain(config_vars, req):
+def post_chain(log_list, req):
     resp_list = []
-    log_list = config_vars["log_list"]
 
     def post(log):
-        r = requests.post(log + "/ct/v1/add-chain", data=req, verify=False, timeout=2)
+        r = requests.post(log + "/ct/v1/add-chain", data=req, timeout=5)
         return r
 
-    for log in log_list:
+    log = logging.getLogger()
+    log.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
+
+    for log_url in log_list:
         try:
-            r = retry(post, args=(log,), sleeptime=0, jitter=0)
+            r = retry(post, args=(log_url,), sleeptime=2)
         except requests.exceptions.RequestException as e:
-            print(log, e)
+            log.debug(log_url + e)
 
         if r.status_code != 200:
-            print(log, r.text)
+            log.debug(log_url + r.text)
         else:
             r = json.loads(r.text)
-            print(log)
-            print("\tSCT Version", r['sct_version'])
-            print("\tID", r['id'])
-            print("\tTimestamp", r['timestamp'])
-            print("\tExtensions", r['extensions'])
-            print("\tSignature", r['signature'])
+            log.info(log_url)
+            log.info("\tSCT Version: " + str(r['sct_version']))
+            log.info("\tID: " + r['id'])
+            log.info("\tTimestamp: " + str(r['timestamp']))
+            log.info("\tExtensions: " + r['extensions'])
+            log.info("\tSignature: " + r['signature'])
             resp_list.append(r)
 
     return resp_list
