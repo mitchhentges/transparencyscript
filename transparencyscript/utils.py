@@ -160,7 +160,8 @@ def post_chain(log_list, req):
         try:
             r = retry(post, args=(log_url, req), sleeptime=3)
         except requests.exceptions.RequestException as e:
-            log.debug(log_url + e)
+            log.debug(log_url)
+            log.debug(e)
 
         if r.status_code != 200:
             log.debug(log_url + r.text)
@@ -177,7 +178,7 @@ def post_chain(log_list, req):
     return resp_list
 
 
-# Write 'contents' to 'file_path' according to 'open_mode' with optional verbose parameter
+# Write 'contents' separated by commas to 'file_path' according to 'open_mode' with optional verbose parameter
 def write_to_file(file_path, contents, open_mode, verbose=True):
     print("Writing to file %s" % file_path)
 
