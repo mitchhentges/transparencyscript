@@ -62,7 +62,7 @@ def test_get_summary():
     correct_summary = SUMMARY_TEXT
 
     with requests_mock.Mocker() as m:
-        m.get("https://ipv.sx/tmp/SHA256SUMMARY", text=SUMMARY_TEXT)
+        m.get("https://ipv.sx/tmp/SHA256SUMMARY", text=correct_summary)
         summary = requests.get("https://ipv.sx/tmp/SHA256SUMMARY").text
 
     assert summary == correct_summary
@@ -192,14 +192,8 @@ def test_post():
           'BwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKE' \
           'kROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg=="]}'
 
-    post_resp = Response()
-    post_resp.status_code = 200
-    post_resp._content = b'{"sct_version":0,"id":"pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=","timestamp":1' \
-                         b'502213019869,"extensions":"","signature":"BAMASDBGAiEAnZ6sJDFXEPxpbhVkiFusLCyoa+84' \
-                         b'8vzGRJnh+2cSB84CIQCLXi3iEjK/uOcbrNnKAdds2wXV1v6xsn4II4jscs6bfQ=="}'
-
     with requests_mock.Mocker() as m:
-        m.post(log_url + "/ct/v1/add-chain", text=post_resp.text)
+        m.post(log_url + "/ct/v1/add-chain", text=correct_resp)
         resp = requests.post(log_url + "/ct/v1/add-chain", data=req, timeout=5).text
 
     assert resp == str(correct_resp)
