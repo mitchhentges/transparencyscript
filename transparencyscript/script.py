@@ -1,5 +1,7 @@
 import os
 import sys
+import logging
+import base64
 from subprocess import check_call
 
 from transparencyscript.constants import TRANSPARENCY_SUFFIX
@@ -12,6 +14,14 @@ from transparencyscript.signed_certificate_timestamp import SignedCertificateTim
 def main(name=None):
     if name not in (None, '__main__'):
         return
+
+    log = logging.getLogger()
+    log.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
 
     # Store default parameters and keys in config_vars
     if len(sys.argv) > 1:
@@ -66,7 +76,8 @@ def main(name=None):
         # Append to sct_list file for each chain
         for resp in resp_list:
             sct = SignedCertificateTimestamp(resp)
-            write_to_file(sct_file_path, sct.to_rfc6962(), open_mode='ab')
+            sct = base64.b64encode(sct.to_rfc6962()).decode('utf-8')
+            write_to_file(sct_file_path, sct, open_mode='a')
 
 
 main(name=__name__)

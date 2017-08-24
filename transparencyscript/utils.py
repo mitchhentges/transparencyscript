@@ -3,13 +3,14 @@ import re
 import json
 import sys
 import requests
-import subprocess
-import hashlib
 import logging
 from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
 
+
+log = logging.getLogger()
+log.setLevel(logging.DEBUG)
 
 # Create transparency name for required lego_command parameter
 def make_transparency_name(tree_head_hex, version, product):
@@ -146,33 +147,26 @@ def post(log_url, req):
 
 # Using certificates json, retrieve SCTs through post requests to CT logs
 def post_chain(log_list, req):
-    log = logging.getLogger()
-    log.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    log.addHandler(handler)
-
     resp_list = []
 
     for log_url in log_list:
         try:
             r = retry(post, args=(log_url, req), sleeptime=3)
         except requests.exceptions.RequestException as e:
-            log.debug(log_url)
-            log.debug(e)
+            log.debug("Ran out of retries.")
+            log.info(log_url)
+            log.info(e)
 
         if r.status_code != 200:
-            log.debug(log_url + r.text)
+            log.info(log_url + r.text)
         else:
             r = json.loads(r.text)
-            log.info(log_url)
-            log.info("\tSCT Version: " + str(r['sct_version']))
-            log.info("\tID: " + r['id'])
-            log.info("\tTimestamp: " + str(r['timestamp']))
-            log.info("\tExtensions: " + r['extensions'])
-            log.info("\tSignature: " + r['signature'])
+            log.debug(log_url)
+            log.debug("\tSCT Version: " + str(r['sct_version']))
+            log.debug("\tID: " + r['id'])
+            log.debug("\tTimestamp: " + str(r['timestamp']))
+            log.debug("\tExtensions: " + r['extensions'])
+            log.debug("\tSignature: " + r['signature'])
             resp_list.append(r)
 
     return resp_list
@@ -188,4 +182,6 @@ def write_to_file(file_path, contents, open_mode, verbose=True):
             print(" %s" % line)
 
     with open(file_path, open_mode) as f:
+        if os.stat(file_path).st_size != 0:
+            f.write("\n")
         f.write(contents)

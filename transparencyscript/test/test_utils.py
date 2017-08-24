@@ -1,7 +1,7 @@
 import os
 import requests
 import requests_mock
-import json
+from requests.models import Response
 
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
     get_transparency_vars, get_summary, get_lego_env, get_lego_command, get_save_command, get_chain, post, post_chain
@@ -241,6 +241,12 @@ def test_post_chain():
           'pr/1wXKtx8/wApIvJSwtmVi4MFU5aMqrSDE6ea73Mj2tcMyo5jMd6jmeWUHK8so/joWUoHOUgwuX4Po1QYz+3dszkDqMp4fklx' \
           'BwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKE' \
           'kROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg=="]}'
+
+    post_resp = Response()
+    post_resp.status_code = 200
+    post_resp._content = b'{"sct_version":0,"id":"pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=","timestamp":1' \
+                         b'502904412602,"extensions":"","signature":"BAMARzBFAiEAxW8lhqcq4Val8WBCNiHzB/6AcZVr' \
+                         b'rY8iLX5eQ0v1/G0CIHPxBerOpZav5/7KidFFDno7x+MogkWczdlNGwCSRNw7"}'
 
     resp_list = post_chain(log_list, req)
 
