@@ -125,7 +125,7 @@ def get_save_command(config_vars, base_name):
 def get_chain(config_vars):
     chain_file = os.path.join(config_vars["public_artifact_dir"], config_vars["payload"]["chain"])
 
-    certdata = []
+    cert_data = []
     with open(chain_file) as f:
         lines = f.read()
         lines = lines.split("-----BEGIN CERTIFICATE-----\n")
@@ -133,8 +133,11 @@ def get_chain(config_vars):
             line = line.replace("-----END CERTIFICATE-----", "")
             line = line.replace("\r", "")
             line = line.replace("\n", "")
-            certdata.append(line)
-    req = '{"chain" : ["' + '", "'.join(certdata[1:]) + '"]}'
+            cert_data.append(line)
+    req = {"chain" : []}
+    for cert in cert_data[1:]:
+        req["chain"].append(cert)
+    req = json.dumps(req)
 
     return req
 
