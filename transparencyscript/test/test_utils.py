@@ -4,7 +4,7 @@ import requests_mock
 from requests.models import Response
 
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
-    get_transparency_vars, get_summary, get_lego_env, get_lego_command, get_save_command, get_chain, post, post_chain
+    get_transparency_vars, get_lego_env, get_lego_command, get_save_command, get_chain, post_chain
 from transparencyscript.test import get_fake_config, get_fake_passwords, get_fake_task, get_fake_transparency
 from transparencyscript.constants import SUMMARY_TEXT, TRANSPARENCY_SUFFIX
 
@@ -59,11 +59,13 @@ def test_get_transparency_vars():
 
 
 def test_get_summary():
+    correct_summary = SUMMARY_TEXT
+
     with requests_mock.Mocker() as m:
         m.get("https://ipv.sx/tmp/SHA256SUMMARY", text=SUMMARY_TEXT)
         summary = requests.get("https://ipv.sx/tmp/SHA256SUMMARY").text
 
-    assert get_summary("https://ipv.sx/tmp/SHA256SUMMARY")[0:447] == summary
+    assert summary == correct_summary
 
 
 def test_get_lego_env():
@@ -104,7 +106,7 @@ def test_get_save_command():
 
 
 def test_get_chain():
-    correct_req = '{"chain" : ["MIIFgTCCBGmgAwIBAgISA2RjCEL7JTlwJbUFmX95dBdhMA0GCSqGSIb3DQEBCwUAMEoxCzAJBgNVBAYTAlVTM' \
+    correct_req = '{"chain": ["MIIFgTCCBGmgAwIBAgISA2RjCEL7JTlwJbUFmX95dBdhMA0GCSqGSIb3DQEBCwUAMEoxCzAJBgNVBAYTAlVTM' \
                   'RYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQDExpMZXQncyBFbmNyeXB0IEF1dGhvcml0eSBYMzAeFw0xNzA4MDgxNjE' \
                   '3MDBaFw0xNzExMDYxNjE3MDBaMCUxIzAhBgNVBAMTGmludmFsaWQuc3RhZ2UuZngtdHJhbnMubmV0MIIBIjANBgkqhkiG9w0BA' \
                   'QEFAAOCAQ8AMIIBCgKCAQEAtLKqMOVS3IPNVRMw+hzOTGyP+6VVyc4v3/w0Uaki1tTZX3o8u00+2iz8AxFA5Z/GvGsI5g3Djaw' \
@@ -152,7 +154,7 @@ def test_post():
                    '"extensions":"","signature":"BAMASDBGAiEAnZ6sJDFXEPxpbhVkiFusLCyoa+848vzGRJnh+2cSB84CIQCLXi3iEj' \
                    'K/uOcbrNnKAdds2wXV1v6xsn4II4jscs6bfQ=="}'
 
-    log = 'https://ct.googleapis.com/pilot'
+    log_url = 'https://ct.googleapis.com/pilot'
     req = '{"chain" : ["MIIFgTCCBGmgAwIBAgISA2RjCEL7JTlwJbUFmX95dBdhMA0GCSqGSIb3DQEBCwUAMEoxCzAJBgNVBAYTAlVTM' \
           'RYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQDExpMZXQncyBFbmNyeXB0IEF1dGhvcml0eSBYMzAeFw0xNzA4MDgxNjE' \
           '3MDBaFw0xNzExMDYxNjE3MDBaMCUxIzAhBgNVBAMTGmludmFsaWQuc3RhZ2UuZngtdHJhbnMubmV0MIIBIjANBgkqhkiG9w0BA' \
@@ -190,9 +192,17 @@ def test_post():
           'BwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKE' \
           'kROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg=="]}'
 
-    resp = post(log, req)
+    post_resp = Response()
+    post_resp.status_code = 200
+    post_resp._content = b'{"sct_version":0,"id":"pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=","timestamp":1' \
+                         b'502213019869,"extensions":"","signature":"BAMASDBGAiEAnZ6sJDFXEPxpbhVkiFusLCyoa+84' \
+                         b'8vzGRJnh+2cSB84CIQCLXi3iEjK/uOcbrNnKAdds2wXV1v6xsn4II4jscs6bfQ=="}'
 
-    assert resp.text == str(correct_resp)
+    with requests_mock.Mocker() as m:
+        m.post(log_url + "/ct/v1/add-chain", text=post_resp.text)
+        resp = requests.post(log_url + "/ct/v1/add-chain", data=req, timeout=5).text
+
+    assert resp == str(correct_resp)
 
 
 def test_post_chain():
@@ -241,12 +251,6 @@ def test_post_chain():
           'pr/1wXKtx8/wApIvJSwtmVi4MFU5aMqrSDE6ea73Mj2tcMyo5jMd6jmeWUHK8so/joWUoHOUgwuX4Po1QYz+3dszkDqMp4fklx' \
           'BwXRsW10KXzPMTZ+sOPAveyxindmjkW8lGy+QsRlGPfZ+G6Z6h7mjem0Y+iWlkYcV4PIWL1iwBi8saCbGS5jN2p8M+X+Q7UNKE' \
           'kROb3N6KOqkqm57TH2H3eDJAkSnh6/DNFu0Qg=="]}'
-
-    post_resp = Response()
-    post_resp.status_code = 200
-    post_resp._content = b'{"sct_version":0,"id":"pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=","timestamp":1' \
-                         b'502904412602,"extensions":"","signature":"BAMARzBFAiEAxW8lhqcq4Val8WBCNiHzB/6AcZVr' \
-                         b'rY8iLX5eQ0v1/G0CIHPxBerOpZav5/7KidFFDno7x+MogkWczdlNGwCSRNw7"}'
 
     resp_list = post_chain(log_list, req)
 

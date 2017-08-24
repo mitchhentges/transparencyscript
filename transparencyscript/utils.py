@@ -8,9 +8,9 @@ from redo import retry
 
 from transparencyscript.constants import TRANSPARENCY_VERSION, TRANSPARENCY_SUFFIX
 
-
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
+
 
 # Create transparency name for required lego_command parameter
 def make_transparency_name(tree_head_hex, version, product):
@@ -134,7 +134,8 @@ def get_chain(config_vars):
             line = line.replace("\r", "")
             line = line.replace("\n", "")
             cert_data.append(line)
-    req = {"chain" : []}
+
+    req = {"chain": []}
     for cert in cert_data[1:]:
         req["chain"].append(cert)
     req = json.dumps(req)
