@@ -126,4 +126,4 @@ class SignedCertificateTimestamp:
         ext_len = struct.pack("!H", len(self.extensions))
 
         return version + self.id + timestamp + \
-               ext_len + self.extensions + self.signature
+            ext_len + self.extensions + self.signature

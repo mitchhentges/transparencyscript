@@ -24,7 +24,7 @@ setup(
         "redo",
         "requests"
     ],
-    tests_require = [
+    tests_require=[
         "pytest",
         "requests-mock"
     ],
