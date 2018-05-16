@@ -17,14 +17,14 @@ setup(
     classifiers=(
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ),
     packages=find_packages(),
     install_requires=[
         "redo",
         "requests"
     ],
-    tests_require = [
+    tests_require=[
         "pytest",
         "requests-mock"
     ],

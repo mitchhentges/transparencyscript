@@ -1,7 +1,6 @@
 import os
 import requests
 import requests_mock
-from requests.models import Response
 
 from transparencyscript.utils import make_transparency_name, get_config_vars, get_password_vars, get_task_vars, \
     get_transparency_vars, get_lego_env, get_lego_command, get_save_command, get_chain, post_chain
